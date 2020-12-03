@@ -122,12 +122,16 @@ public class DbConnection {
     * @param username The username to lookup.
     */
     public WondoughUser getUser(String username) throws SQLException {
-        Statement stmt = null;
-        String query = "SELECT * FROM users WHERE username='" + username + "' LIMIT 1;";
+        PreparedStatement stmt = null;
+        String query = "SELECT * FROM users WHERE username=? LIMIT 1;";
 
         try {
-            stmt = this.connection.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
+            //the use of prepared statements mean the sql query is loaded
+            //before the username is added to it preventing sql injection
+            //on login
+            stmt = this.connection.prepareStatement(query);
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
 
             if(rs.next()) {
                 WondoughUser user = new WondoughUser(rs.getInt("id"), rs.getString("username"));
@@ -138,6 +142,7 @@ public class DbConnection {
                 return user;
             }
         } catch (SQLException e ) {
+            // return null;
             throw e;
         } finally {
             if (stmt != null) { stmt.close(); }
@@ -192,7 +197,6 @@ public class DbConnection {
             stmt.setString(2, app.getRequestToken());
             stmt.setString(3, app.getAccessToken());
             stmt.executeUpdate();
-
             return app;
         } catch (SQLException e ) {
             throw e;
@@ -295,6 +299,11 @@ public class DbConnection {
     public boolean createTransaction(int user, int recipient, String description, float amount) throws SQLException {
         // don't allow users to send negative amounts
         if(amount < 0) {
+            return false;
+        }
+
+        //Below is the fix for being able to transfer more money than available
+        if(amount > getTransactions(user).getAccountBalance()){
             return false;
         }
 
