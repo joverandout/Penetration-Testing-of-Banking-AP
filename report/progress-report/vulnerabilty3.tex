@@ -11,20 +11,13 @@ since the malicious script is rendered automatically, therefore there is no requ
    <script>alert(document.cookie)</script>
 \end{minted}
 Once injected upon the selection of \textit{List transactions} this will open a popup window which will display the users token.
-\textbf{Mitigation:} The process of creating a transaction occurs in the \verb|DbConnection| file in the \verb|createTransaction()| procedure. This feature already
-includes a check to ensure the amount in the transaction is not negative, as follows:
-\begin{minted}{java}
-   if(amount < 0) {
-           return false;
-   }
-\end{minted}
-And as such in a similar vein an additional check was then added which makes use of the \verb|getTransactions(user)| and \verb|getAccountBalance()| functions to retrieve
-the user's balance and compare it to the amount. As follows:
-\begin{minted}{java}
-   if(amount > getTransactions(user).getAccountBalance()){
-       return false;
-   }
-\end{minted}
-This was then tested manually with inputs larger than the balance, which were all not entered as transactions, followed by the balance itself and values lower than it, all of
-which the fix permitted. However I then set about automating this testing.
+\begin{figure}[h]
+   \centering
+   \includegraphics[width=0.5\textwidth]{figs/popup.png}
+   \caption{The popup window displayed when a user clicks \textit{List transactions}}
+   \label{popup}
+\end{figure}\\
+As can be seen from this figure, this injecton allows a user to display the token. This again being particularly dangerous since the tokens are not time dependent on this website.
+Consequently this can be said to be a major security flaw since it has the possibility of allowing a hacker indefinite access to the banking website.\\ \\
+\textbf{Mitigation:} 
  
