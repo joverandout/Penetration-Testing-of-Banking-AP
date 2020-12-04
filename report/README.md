@@ -1,4 +1,4 @@
-# Starter pack for CS310 etc.
+# Starter pack for CS263 report.
 
 This repository contains a starter pack of resources for CS310 and other, similar modules. It is comprised of:
 
