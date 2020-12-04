@@ -1,0 +1,43 @@
+\documentclass[a4paper,fleqn,twoside,12pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%
+
+\input{../common/common.tex}
+\input{../common/project.tex}
+
+\assignment{Progress report}
+
+%%%%%%%%%%%%%%%%%%%%
+
+\pagestyle{plain}
+\renewcommand{\headrulewidth}{0.0pt}
+
+\makeatletter
+\fancypagestyle{plain}{
+	\fancyhf{}
+	\fancyhead[LE]{\thepage}
+	\fancyhead[RE]{\textit{\@author}}
+	\fancyhead[RO]{\thepage}
+	\fancyhead[LO]{\textit{\@title}}
+}
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\input{../common/titlepage.tex}
+
+\pagestyle{plain}
+\input{introduction.tex}
+\input{vulnerabilty1.tex}
+\input{vulnerabilty2.tex}
+\input{vulnerabilty3.tex}
+
+\input{progress.tex}
+\input{project-management.tex}
+
+\bibliographystyle{../common/plainnat}
+\bibliography{../common/bibliography}
+
+\end{document}

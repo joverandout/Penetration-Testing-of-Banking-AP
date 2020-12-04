@@ -1,0 +1,30 @@
+\section{Vulnerability: JavaScript Injection Attack}
+\label{sec:background}
+\textbf{Description:} A second type of injection attack works on this website. It was possible to enter a JavaScript script into the transaction box. This would be stored by
+the database as the description of the transaction. Consequently when the user clicked \textit{List transactions} each transaction would be listed, and as such each description
+interpreted in html. This means a description enclosed by \verb|<script></script>| tags will be interpreted as a script and as such executed as the website comes to list the
+transactions. This allows a hacker to gain valuable information by printing out session data in a pop up window. This security flaw is exasperated by the fact that all transactions
+are viewable to all users. Thus any script injected will affect all users. This is known as a persistent (or stored) vulnerability. Persistent vulnerabilities are more significant
+since the malicious script is rendered automatically, therefore there is no requirement to individually target victims or to take them to a third party website.\\ \\
+\textbf{Testing the Vulnerability:} To test this vulnerability a series of JavaScript queries were entered as transactions. One of the most dangerous was the following:
+\begin{minted}{html}
+   <script>alert(document.cookie)</script>
+\end{minted}
+Once injected upon the selection of \textit{List transactions} this will open a popup window which will display the users token.
+\textbf{Mitigation:} The process of creating a transaction occurs in the \verb|DbConnection| file in the \verb|createTransaction()| procedure. This feature already
+includes a check to ensure the amount in the transaction is not negative, as follows:
+\begin{minted}{java}
+   if(amount < 0) {
+           return false;
+   }
+\end{minted}
+And as such in a similar vein an additional check was then added which makes use of the \verb|getTransactions(user)| and \verb|getAccountBalance()| functions to retrieve
+the user's balance and compare it to the amount. As follows:
+\begin{minted}{java}
+   if(amount > getTransactions(user).getAccountBalance()){
+       return false;
+   }
+\end{minted}
+This was then tested manually with inputs larger than the balance, which were all not entered as transactions, followed by the balance itself and values lower than it, all of
+which the fix permitted. However I then set about automating this testing.
+ 

@@ -1,0 +1,42 @@
+\documentclass[a4paper,fleqn,12pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%
+
+\input{../common/common.tex}
+\input{../common/project.tex}
+
+\assignment{Project specification}
+
+%%%%%%%%%%%%%%%%%%%%
+
+\pagestyle{plain}
+\renewcommand{\headrulewidth}{0.0pt}
+
+\makeatletter
+\fancypagestyle{plain}{
+	\fancyhf{}
+	\fancyhead[R]{\textit{\@title} - \textit{\@assignment}}
+    \fancyhead[L]{\textit{\@author}}
+    \fancyfoot[C]{\thepage}
+}
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\input{../common/titlepage.tex}
+
+\pagestyle{plain}
+
+\section{Introduction}
+
+% \input{introduction.tex}
+% \input{background.tex}
+% \input{progress.tex}
+% \input{project-management.tex}
+
+\bibliographystyle{../common/plainnat}
+\bibliography{../common/bibliography}
+
+\end{document}

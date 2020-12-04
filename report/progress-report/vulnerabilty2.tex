@@ -1,0 +1,26 @@
+\section{Vulnerability: Sending more money than balance}
+\label{sec:background}
+\textbf{Description:} Upon further penetration testing it was discovered that it was possible 
+to send money from the account logged in on to another of a larger amount than the account's balance. This may, upon first glance appear to be a bug rather than
+necessarily a vulnerability. However, from the previous section we have displayed proof of concept that it is possible for a hacker to gain access to someone's
+account without the relevant information. As such he could feasibly send any amount (even ludicrous sums like \£1 billion) from this bank account at Wondough bank
+to his bank account with another bank. His bank likely does not have this issue and he has just granted himself huge amounts of money illegally. \\ \\
+\textbf{Testing the Vulnerability:} In order to test this vulnerability I wanted to test to see different things the flaw could enable. It is possible to send
+transactions to yourself however I do not see how useful this is as a vulnerability to an attacker. However I then decided to add a new user to the database in order
+to carry out further tests. \\ \\
+\textbf{Mitigation:} The process of creating a transaction occurs in the \verb|DbConnection| file in the \verb|createTransaction()| procedure. This feature already
+includes a check to ensure the amount in the transaction is not negative, as follows:
+\begin{minted}{java}
+    if(amount < 0) {
+            return false;
+    }
+\end{minted}
+And as such in a similar vein an additonal check was then added which makes use of the \verb|getTransactions(user)| and \verb|getAccountBalance()| functions to retrieve
+the user's balance and compare it to the amount. As follows:
+\begin{minted}{java}
+    if(amount > getTransactions(user).getAccountBalance()){
+        return false;
+    }
+\end{minted}
+This was then tested manually with inputs larger than the balance, which were all not entered as transactions, followed by the balance itself and values lower than it, all of
+which the fix permitted. However I then set about automating this testing.
