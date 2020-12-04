@@ -1,6 +1,6 @@
 # Starter pack for CS263 report.
 
-This repository contains a starter pack of resources for CS310 and other, similar modules. It is comprised of:
+This repository contains a starter pack of resources for CS263 and other, similar modules. It is comprised of:
 
 - LaTeX templates for the project specification, progress report, and dissertation.
 - GitHub Actions workflows for building each report and making them available as build artifacts.
