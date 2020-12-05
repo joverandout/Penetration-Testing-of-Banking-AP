@@ -19,15 +19,15 @@ public class test3 {
 
     public String checkAgainstJavascriptInjection(){     
         try{
-        DbConnection db = Program.getInstance().getDbConnection();
-        db.createTransaction(1, 0, "<script>testScript</script>", 1);
-        Transactions transactions = db.getTransactions(1);
+        DbConnection db = Program.getInstance().getDbConnection(); //connect to the database
+        db.createTransaction(1, 0, "<script>testScript</script>", 1); //create a new transaction 
+        Transactions transactions = db.getTransactions(1); //get all the transactions for that user
 
-        Transaction transactionJustEntered = transactions.getTransactions().get(0);
+        Transaction transactionJustEntered = transactions.getTransactions().get(0); //get the transaction just entered
 
-        if(transactionJustEntered.getDescription().contains("<")) return "FAILED";
-        else if(transactionJustEntered.getDescription().contains(">")) return "FAILED";
-        else return "PASSED";
+        if(transactionJustEntered.getDescription().contains("<")) return "FAILED"; //if it contains < encoding hasn't worked
+        else if(transactionJustEntered.getDescription().contains(">")) return "FAILED"; //if it contains > encoding hasn't worked
+        else return "PASSED"; // otherwise encoding has worked
         }
         catch(SQLException e){
             System.out.println(e.toString());
