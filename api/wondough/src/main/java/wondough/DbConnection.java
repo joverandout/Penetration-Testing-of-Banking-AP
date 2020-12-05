@@ -308,8 +308,10 @@ public class DbConnection {
             return false;
         }
 
+        //Below is the fix for preventing javascript injection
+        //By html encoding the description it prevents any script being interpreted as a script
+        //As such the issue is fixed
         String encodedVersionToStopJSInjection = StringEscapeUtils.escapeHtml(description);
-        System.out.println(encodedVersionToStopJSInjection);
 
         PreparedStatement creditStmt = null;
         PreparedStatement debitStmt = null;
