@@ -25,7 +25,7 @@ public class APIController {
             Integer user = Program.getInstance().getDbConnection().isValidAccessToken(token);
 
             if(user == null) {
-                return "Not a valid access token! ";
+                return "Not a valid access token!";
             }
 
             return Program.getInstance().getDbConnection().getTransactions(user);
