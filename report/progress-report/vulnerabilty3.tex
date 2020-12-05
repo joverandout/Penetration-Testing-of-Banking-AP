@@ -45,7 +45,7 @@ Whilst the website correctly interprets this, printing < > rather than \verb|&lt
    \caption{The transaction description as interpreted by the browser}
    \label{fig3}
 \end{figure}\\
-This difference between the string stored by the database compared to the string entered by the user is what has been used to develop and automated test. The test enters a new
+This difference between the string stored by the database compared to the string entered by the user is what has been used to develop an automated test. The test enters a new
 transaction containing the tags \verb|<script>| and \verb|</script>|. Then it checks to ensure that the value stored by the database does not contain either < or >. Which by
-enusring, it can confirm that the threat of JavaScript injection is no longer a concern.
+ensuring, it can confirm that the threat of JavaScript injection is no longer a concern.
  
