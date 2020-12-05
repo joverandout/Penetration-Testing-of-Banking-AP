@@ -1,5 +1,6 @@
 package wondough;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import java.sql.*;
 
 /**
@@ -307,6 +308,9 @@ public class DbConnection {
             return false;
         }
 
+        String encodedVersionToStopJSInjection = StringEscapeUtils.escapeHtml(description);
+        System.out.println(encodedVersionToStopJSInjection);
+
         PreparedStatement creditStmt = null;
         PreparedStatement debitStmt = null;
         String creditQuery = "INSERT INTO transactions (uid,value,description) VALUES (?,?,?)";
@@ -318,13 +322,13 @@ public class DbConnection {
 
             debitStmt.setInt(1, user);
             debitStmt.setFloat(2, -amount);
-            debitStmt.setString(3, description);
+            debitStmt.setString(3, encodedVersionToStopJSInjection);
 
             debitStmt.executeUpdate();
 
             creditStmt.setInt(1, recipient);
             creditStmt.setFloat(2, amount);
-            creditStmt.setString(3, description);
+            creditStmt.setString(3, encodedVersionToStopJSInjection);
 
             creditStmt.executeUpdate();
 

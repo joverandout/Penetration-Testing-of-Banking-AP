@@ -17,6 +17,9 @@ import org.slf4j.LoggerFactory;
 import spark.Spark;
 import wondough.controllers.APIController;
 import wondough.controllers.AuthController;
+import wondough.tests.test1;
+import wondough.tests.test2;
+
 
 /**
 * This class contains the main entry point for the application.
@@ -149,6 +152,12 @@ public class Program {
             // print something useful to stdout to tell users that the server
             // started successfully
             System.out.printf("\n\nServer started successfully and is running on port %d\n", port);
+
+            test1 tests1 = new test1();
+            tests1.test();
+
+            test2 tests2 = new test2();
+            tests2.test();
         }
         catch(Exception ex) {
             System.out.println(ex.toString());

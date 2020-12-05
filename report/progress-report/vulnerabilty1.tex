@@ -37,7 +37,7 @@ Rather than creating and executing the query as follows:
 \begin{minted}{java}
    PreparedStatement stmt = null;
    String query = "SELECT * FROM users WHERE username='"
-       + username + "' LIMIT 1;";
+         + username + "' LIMIT 1;";
    stmt = this.connection.Statement();
    ResultSet rs = stmt.executeQuery(query);
 \end{minted}
@@ -50,4 +50,23 @@ It is done as follows:
    ResultSet rs = stmt.executeQuery();
 \end{minted}
 This is the change I made to the \verb|DbConnection.java| file in order to mitigate this attack. Below is the automated test I designed in order to test the changes appropriately extinguished the
-vulnerability.
+vulnerability. Therefore I designed an automated test to run automatically on the startup of the server to check this vulnerability was not a threat. It can be seen at \verb|test1.java|. It
+works by calling the get user function with all four examples of SQL injection commands given previously. If none of them return a user then it passes else it fails. Below is the
+important check.\begin{minted}{java}
+private String runSQLInjection(){
+   String[] testSQLInjections = {"blank' OR 1=1;--",
+   "blank' OR 'x'='x';--", "blank' OR '*;--", "blank' OR TRUE;--"};
+   DbConnection db = Program.getInstance().getDbConnection();
+   try {
+      for (int i = 0; i <= 3; i++) {
+      if (db.getUser(testSQLInjections[i]) instanceof WondoughUser)
+         return "FAILED";
+      }
+   }
+   catch (SQLException e) {
+      return "FAILED" + e.toString();
+   }
+   return "PASSED";
+}
+\end{minted}
+This test passed upon starting the server after implementing my fix and as such I consider this vulnerability solved.
