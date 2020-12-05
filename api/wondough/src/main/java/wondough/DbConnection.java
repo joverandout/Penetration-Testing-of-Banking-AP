@@ -349,7 +349,6 @@ public class DbConnection {
     */
     public Transactions getTransactions(int user) throws SQLException {
         PreparedStatement stmt = null;
-        System.out.println(user);
         String query = "SELECT * FROM transactions WHERE uid=? ORDER BY tid DESC;";
 
         try {

@@ -19,6 +19,8 @@ import wondough.controllers.APIController;
 import wondough.controllers.AuthController;
 import wondough.tests.test1;
 import wondough.tests.test2;
+import wondough.tests.test3;
+
 
 
 /**
@@ -158,6 +160,9 @@ public class Program {
 
             test2 tests2 = new test2();
             tests2.test();
+
+            test3 tests3 = new test3();
+            tests3.test();
         }
         catch(Exception ex) {
             System.out.println(ex.toString());

@@ -34,16 +34,18 @@ entered into the database in place of the description.
 This works as required and if you look at the databse you'll see the encoded raw text:
 \begin{figure}[h]
    \centering
-   \includegraphics[width=0.5\textwidth]{figs/database.png}
+   \includegraphics[width=0.8\textwidth]{figs/database.png}
    \caption{The transaction description as stored by the database}
    \label{fig2}
 \end{figure}\\
-Whilst ther website correctly interprets this printing < and > over \verb|&lt;| and \verb|&gt;|
+Whilst the website correctly interprets this, printing < > rather than \verb|&lt;| \verb|&gt;|
 \begin{figure}[h]
    \centering
    \includegraphics[width=0.5\textwidth]{figs/websitejs.png}
    \caption{The transaction description as interpreted by the browser}
    \label{fig3}
 \end{figure}\\
-
+This difference between the string stored by the database compared to the string entered by the user is what has been used to develop and automated test. The test enters a new
+transaction containing the tags \verb|<script>| and \verb|</script>|. Then it checks to ensure that the value stored by the database does not contain either < or >. Which by
+enusring, it can confirm that the threat of JavaScript injection is no longer a concern.
  
