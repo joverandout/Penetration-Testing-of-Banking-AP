@@ -22,7 +22,7 @@ public class test4 {
             DbConnection connection = new DbConnection("wondough.db");
             SecurityConfiguration securityConfiguration = Program.getInstance().getSecurityConfiguration();
 
-            WondoughUser testuser1 = new WondoughUser(1, "test3User@wondoughbank.com");
+            WondoughUser testuser1 = new WondoughUser(1, "test4User@wondoughbank.com");
             testuser1.setSalt(securityConfiguration.generateSalt());
             testuser1.setHashedPassword(securityConfiguration.pbkdf2("password", testuser1.getSalt()));
             testuser1.setIterations(securityConfiguration.getIterations());
@@ -30,17 +30,17 @@ public class test4 {
             
             if((connection.createUser(testuser1)) == false) return "FAILED";
 
-            WondoughUser testuser2 = new WondoughUser(1, "test3User@wondoughbank.com");
+            WondoughUser testuser2 = new WondoughUser(1, "test4User@wondoughbank.com");
             testuser2.setSalt(securityConfiguration.generateSalt());
-            testuser2.setHashedPassword(securityConfiguration.pbkdf2("password", testuser1.getSalt()));
+            testuser2.setHashedPassword(securityConfiguration.pbkdf2("password", testuser2.getSalt()));
             testuser2.setIterations(securityConfiguration.getIterations());
             testuser2.setKeySize(securityConfiguration.getKeySize());
 
-            if((connection.createUser(testuser1)) == true) return "FAILED";
+            if((connection.createUser(testuser2)) == true) return "FAILED";
 
             try{
                 Connection connectionToDelete = DriverManager.getConnection("jdbc:sqlite:" + "wondough.db");
-                String query = "DELETE FROM users WHERE username='test3User@wondoughbank.com'";
+                String query = "DELETE FROM users WHERE username='test4User@wondoughbank.com'";
                 Statement stmt = connectionToDelete.createStatement();
                 stmt.executeUpdate(query);
                 return "PASSED";

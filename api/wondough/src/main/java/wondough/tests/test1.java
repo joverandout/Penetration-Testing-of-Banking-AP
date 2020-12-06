@@ -10,7 +10,6 @@ public class test1 {
 	public void test() {
         System.out.println();
         System.out.println("TESTS:\n");
-        System.out.println();
 
         String result = runSQLInjection();
         System.out.print("Vulnerability 1:\t\t");

@@ -1,25 +1,50 @@
 \section{Vulnerability: Multiple users with duplicate usernames}
 \label{sec:background}
 \textbf{Description:} The fourth vulnerability I discovered was the ability for multiple users to have the same username. This is a fundamental issue. The username of an account
-needs to be its unique identifier that allows a program to identify an individual specific user. 
-\textbf{Testing the Vulnerability:} In order to test this vulnerability I wanted to test to see different things the flaw could enable. It is possible to send
-transactions to yourself however I do not see how useful this is as a vulnerability to an attacker. However I then decided to add a new user to the database in order
-to carry out further tests. \\ \\
-\textbf{Mitigation:} The process of creating a transaction occurs in the \verb|DbConnection| file in the \verb|createTransaction()| procedure. This feature already
-includes a check to ensure the amount in the transaction is not negative, as follows:
+needs to be its unique identifier that allows a program to identify an individual specific user. If we allow multiple users to share a username then what will happen is that
+upon one of those users signing the program will return the id of the first user in the database with that username. This means that either if they have by chance chosen a
+bad and matching password that access to another users finances could be granted to another. Otherwise it will be impossible for a user to sign in and to access their finances,
+which is without doubt a serious issue.\\ \\
+\textbf{Testing the Vulnerability:} To test this vulnerability I first uncommented the section of code that creates a new user. This then created the user \textit{test4User}
+twice, with passwords \textit{password} and \textit{password2} respectively. I then signed in to the website, as \textit{test4User@wondoughbank.com}, which I was only able to
+do using the password \textit{password}, since upon getting the user the program was returning the first instance in the database. Therefore in a real world scenario the second
+user with password \textit{password2} would be entirely unable to access the website indefinitely.\\ \\
+\textbf{Mitigation:} Solving this vulnerability occurred in the \verb|createUser()| function within \verb|DbConnection|. A check needed to be applied here to ensure that the
+username being used to create the new user did not already exist in the database. To do this the \verb|createUser()| was modified such that it was no longer a \verb|void| but rather
+returned a boolean value. True would be if the user had been created and otherwise false. Therefore at the beginning of create user we call \verb|getUser| on the username and
+if it doesn't return null then that username already exists in the database and as such the function should return false and go no further.
 \begin{minted}{java}
-    if(amount < 0) {
-            return false;
-    }
+   if(getUser(user.getUsername()) != null){
+       System.out.println("User already exists");
+       return false;
+   }
 \end{minted}
-And as such in a similar vein an additonal check was then added which makes use of the \verb|getTransactions(user)| and \verb|getAccountBalance()| functions to retrieve
-the user's balance and compare it to the amount. As follows:
+Although I manually tested this in order to ensure its rigorousness an automated test was devised. This test performed 2 actions that both needed to be completed in order for
+the test to pass. Firstly a new user needed to be created:
 \begin{minted}{java}
-    if(amount > getTransactions(user).getAccountBalance()){
-        return false;
-    }
+   WondoughUser testuser1 = new WondoughUser(1,
+       "test4User@wondoughbank.com");
+   testuser1.setSalt(securityConfiguration.generateSalt());
+   testuser1.setHashedPassword(securityConfiguration.pbkdf2("password",
+       testuser1.getSalt()));
+   testuser1.setIterations(securityConfiguration.getIterations());
+   testuser1.setKeySize(securityConfiguration.getKeySize());
+ 
+   if((connection.createUser(testuser1)) == false) return "FAILED";
 \end{minted}
-This was then tested manually with inputs larger than the balance, which were all not entered as transactions, followed by the balance itself and values lower than it, all of
-which the fix permitted. However I then set about automating this testing. The automatic testing seen in \verb|test2.java| creates a new user \textit{testUser}, it then tries
-to remove his account balance + 1, which should fail if the fix is correct. It then tries the same with his exact account balance, if this works then the fix is perfect. Since
-both these conditions are always fine, this vulnerability has been correctly fixed.
+As can be seen above if the user was not created then the test would fail. After this the test then attempted to create a second user with the same name directly after. The code
+for this was identical since we wanted the users to be the same. However, this time if the user was created the test failed:
+\begin{minted}{java}
+   if((connection.createUser(testuser2)) == true) return "FAILED";
+\end{minted}
+Then if all that did not happen the test passed. The reason for having the condition of making the first user be created in order to pass was to ensure that the database
+connection was working since without this condition the test would pass if it just couldn't connect. Finally I performed some clearing up of the database such that the test data
+was removed since it did not represent a real system user and it also needed to be removed so the test would work again next time:
+\begin{minted}{java}
+   String query ="DELETE FROM users"
+                +"WHERE username='test4User@wondoughbank.com'";
+   Statement stmt = connectionToDelete.createStatement();
+   stmt.executeUpdate(query);
+   return "PASSED";
+\end{minted}
+This test passed every time and as such this vulnerability can be considered thoroughly mitigated.

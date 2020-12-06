@@ -120,12 +120,20 @@ public class Program {
             // initialise the database connection
             this.connection = new DbConnection("wondough.db");
 
-            WondoughUser intern = new WondoughUser(1, "test2User@wondoughbank.com");
-            intern.setSalt(this.securityConfiguration.generateSalt());
-            intern.setHashedPassword(this.securityConfiguration.pbkdf2("password", intern.getSalt()));
-            intern.setIterations(this.securityConfiguration.getIterations());
-            intern.setKeySize(this.securityConfiguration.getKeySize());
-            connection.createUser(intern);
+            // WondoughUser intern = new WondoughUser(1, "test44User@wondoughbank.com");
+            // intern.setSalt(this.securityConfiguration.generateSalt());
+            // intern.setHashedPassword(this.securityConfiguration.pbkdf2("password", intern.getSalt()));
+            // intern.setIterations(this.securityConfiguration.getIterations());
+            // intern.setKeySize(this.securityConfiguration.getKeySize());
+            // connection.createUser(intern);
+
+            // WondoughUser intern2 = new WondoughUser(1, "test44User@wondoughbank.com");
+            // intern2.setSalt(this.securityConfiguration.generateSalt());
+            // intern2.setHashedPassword(this.securityConfiguration.pbkdf2("password2", intern.getSalt()));
+            // intern2.setIterations(this.securityConfiguration.getIterations());
+            // intern2.setKeySize(this.securityConfiguration.getKeySize());
+            // connection.createUser(intern2);
+
 
             // pick an arbitrary port
             port(0);
