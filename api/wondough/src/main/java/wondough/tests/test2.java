@@ -17,19 +17,18 @@ public class test2 {
         System.out.println("\tSending more than balance");
     }
 
-    public String checkUserCantTransferMoreThanBalance(){
-        SecurityConfiguration config = Program.getInstance().getSecurityConfiguration();
-		
+    public String checkUserCantTransferMoreThanBalance(){		
         Connection connection;
-        try{
+        try{ //connect to the database
         String url = "jdbc:sqlite:" + "wondough.db";
         connection = DriverManager.getConnection(url);
         }
         catch(SQLException e){
-            System.out.println("FAILED 1");
+            System.out.println("Failed to even connect: "+ e.toString());
             return"FAILED";
         }
-		// prepare statement
+
+        //add 100 pounds to the testuser
 		PreparedStatement creditStmt = null;
         String creditQuery = "INSERT INTO transactions (uid,value,description) VALUES (?,?,?)";
 
@@ -55,7 +54,17 @@ public class test2 {
 			} else {
 				try {
                     if (db.createTransaction(2, 2, "test", (float) db.getTransactions(2).getAccountBalance()) == true) {
-                        return "PASSED";
+                        try{
+                            Connection connectionToDelete = DriverManager.getConnection("jdbc:sqlite:" + "wondough.db");
+                            String query = "DELETE FROM transactions WHERE description='test'";
+                            Statement stmt = connectionToDelete.createStatement();
+                            stmt.executeUpdate(query);
+                            return "PASSED";
+                        }
+                        catch(SQLException e){
+                            System.out.println(e.toString());
+                            return "FAILED";
+                        }          
                     } else {
                         return "FAILED"; 
                     }

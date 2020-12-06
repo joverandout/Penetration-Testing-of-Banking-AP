@@ -1,10 +1,7 @@
-\section{Vulnerability: Sending more money than balance}
+\section{Vulnerability: Multiple users with duplicate usernames}
 \label{sec:background}
-\textbf{Description:} Upon further penetration testing it was discovered that it was possible 
-to send money from the account logged in on to another of a larger amount than the account's balance. This may, upon first glance appear to be a bug rather than
-necessarily a vulnerability. However, from the previous section we have displayed proof of concept that it is possible for a hacker to gain access to someone's
-account without the relevant information. As such he could feasibly send any amount (even ludicrous sums like \£1 billion) from this bank account at Wondough bank
-to his bank account with another bank. His bank likely does not have this issue and he has just granted himself huge amounts of money illegally. \\ \\
+\textbf{Description:} The fourth vulnerability I discovered was the ability for multiple users to have the same username. This is a fundamental issue. The username of an account
+needs to be its unique identifier that allows a program to identify an individual specific user. 
 \textbf{Testing the Vulnerability:} In order to test this vulnerability I wanted to test to see different things the flaw could enable. It is possible to send
 transactions to yourself however I do not see how useful this is as a vulnerability to an attacker. However I then decided to add a new user to the database in order
 to carry out further tests. \\ \\

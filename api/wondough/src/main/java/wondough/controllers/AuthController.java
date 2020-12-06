@@ -13,6 +13,10 @@ public class AuthController {
     public static Route serveAuthPage = (Request request, Response response) -> {
         Map<String, Object> model = new HashMap<>();
 
+        System.out.println("1."+request.queryParams("app"));
+        System.out.println("2."+Integer.parseInt(request.queryParams("app")));
+        System.out.println(Program.getInstance().getDbConnection().lookupApp(Integer.parseInt(request.queryParams("app"))));
+
         String name = Program.getInstance().getDbConnection().lookupApp(Integer.parseInt(request.queryParams("app")));
 
         if(name == null) {
@@ -22,6 +26,8 @@ public class AuthController {
 
         model.put("appname", name);
         model.put("target", request.queryParams("target"));
+
+        System.out.println(model);
 
         return ViewUtil.render(request, model, "/velocity/auth.vm");
     };

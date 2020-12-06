@@ -98,7 +98,14 @@ public class DbConnection {
     * assumes that the ID of the user is not set to anything.
     * @param user The user account to insert.
     */
-    public void createUser(WondoughUser user) throws SQLException {
+    public boolean createUser(WondoughUser user) throws SQLException {
+        //we need to check if a username already exists:
+
+        if(getUser(user.getUsername()) != null){
+            // System.out.println("User already exists");
+            return false;
+        }
+
         // get the next available ID for this user
         int id = this.largestUserID();
 
@@ -111,6 +118,7 @@ public class DbConnection {
         try {
             stmt = this.connection.createStatement();
             stmt.executeUpdate(query);
+            return true;
         } catch (SQLException e ) {
             throw e;
         } finally {
