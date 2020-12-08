@@ -21,6 +21,7 @@ import wondough.tests.test1;
 import wondough.tests.test2;
 import wondough.tests.test3;
 import wondough.tests.test4;
+import wondough.tests.test5;
 
 
 
@@ -176,6 +177,9 @@ public class Program {
 
             test4 tests4 = new test4();
             tests4.test();
+
+            test5 tests5 = new test5();
+            tests5.test();
         }
         catch(Exception ex) {
             System.out.println(ex.toString());

@@ -1,19 +1,35 @@
 \section{Vulnerability: PBKDF2 Iterations}
 \label{sec:background}
-\textbf{Description:} The password hashing in the wondough website uses PBKDF2. This pseudorandom hashing algorithm has a field called 'iterations', which is the number of times
+\textbf{Description:} The password hashing in the wondough website uses PBKDF2. This pseudo random hashing algorithm has a field called 'iterations', which is the number of times
 the PRF will be applied to the password when deriving the key. The number iterations was deemed to need to be 1000 as early as 2000, and A Kerberos standard in 2005 recommended
-4096 iterations. Therefore the current iteration set as 1 is an entirely unacceptable amount. \begin{center}
-    \begin{tabular}{ |c|c|c|c| } 
-     \hline
-     Password Complexity & Entropy estimate & 1000 iterations &  10000 iterations\\ 
-     \hline
-     Comprehensive8 & 33 & 4 hours 46 minutes & 47 hours \\ 
-     8 random lowercase letters & 37 & 12 hours & 5 days \\ 
-     8 random letters & 45 & 123 days & 3 years 5 months \\
-     8 randmon characters & 52 & 325 years & 3250 years \\
-     \hline
-    \end{tabular}
-    \end{center} 
-(Table taken from \verb|https://cryptosense.com/blog/parameter-choice-for-pbkdf2/|)
-\textbf{Testing the Vulnerability:} 
-\textbf{Mitigation:} 
+4096 iterations. Therefore the current iteration set as 1 is an entirely unacceptable amount\cite{Cyrptosense2015}.\begin{center}
+   \begin{tabular}{ |c|c|c|c| }
+    \hline
+    Password Complexity & Entropy estimate & 1000 iterations &  10000 iterations\\
+    \hline
+    Comprehensive8 & 33 & 4 hours 46 min & 47 hours \\
+    8 random lowercase & 37 & 12 hours & 5 days \\
+    8 random letters & 45 & 123 days & 3.5 months \\
+    8 random characters & 52 & 325 years & 3250 years \\
+    \hline
+   \end{tabular}
+   \end{center}
+The use of a salt has allowed the ability to use precomputed hashes (rainbow tables) to be reduced. It also prevents multiple passwords being tested together. \\ \\
+\textbf{Testing the Vulnerability:} A hacker could use an SQL injection attack (as previously demonstrated is possible on the wondough system) to retrieve hashed passwords of
+users. This means that given a low iteration he could much more easily and in a shorter time brute force the password. A brute force can take as little as 4 hours for 1000
+iterations as seen in the above table and consequently the average time to brute force 1 iteration is dangerously small. As such it is clear that the severity of this vulnerability
+is alarming. Since the likelihood of a brute force working is technically 100\%, although often unachievable time periods, by reducing these time periods to mere hours it
+would allow a hacker to potentially gain access to huge amounts of account passwords and by extension their money. As such the threat is severe. \\ \\
+\textbf{Mitigation:} In line with current information I have decided in order to ensure that password are not likely to be brute forced in an reasonable time, to increase the
+iteration size to 10,000\cite{10.1007/978-3-030-11437-4_8}. This should mean given even a basic 8 lowercase character password it would take (roughly) 5 days to brute force. This is a reasonable length of time
+given that users should have to have a wide range of characters in their password. I updated the \verb|security.json| file which the program uses to determine its security
+configuration.
+\begin{minted}{json}
+   {
+   "iterations": "10000",
+   "keySize": "16"
+   }
+\end{minted}
+Then to design automatic testing I created a new user the same way as I had done for vulnerability 4. For this I checked his iteration size was exactly 10,000 and if it was that
+meant the update to \verb|security.json| had correctly enhanced this security and meant that the chance of this vulnerability working being 100\% was no longer the case. Therefore
+a severe improvement.
