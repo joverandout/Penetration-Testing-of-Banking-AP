@@ -8,6 +8,7 @@ import java.sql.*;
 import java.util.Calendar;
 import java.time.LocalDate; // import the LocalDate class
 import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -196,10 +197,10 @@ public class DbConnection {
 
     public void removeOldTokens(){
         try{
-            Timestamp now = new Timestamp(System.currentTimeMillis()); 
-            String now2 = now.toString();
-            System.out.println(now2);
-            String query3 = "DELETE FROM authorised_apps WHERE expiryDate < "+ now2 + ";";
+            long ut1 = System.currentTimeMillis();
+            System.out.println(ut1);
+            String query3 = "DELETE FROM authorised_apps WHERE expiryDate < "+ ut1 + ";";
+            System.out.println(query3);
             Statement stmt2 = this.connection.createStatement();
             int rs = stmt2.executeUpdate(query3);
             System.out.println("DELETE");
