@@ -203,7 +203,6 @@ public class DbConnection {
             System.out.println(query3);
             Statement stmt2 = this.connection.createStatement();
             int rs = stmt2.executeUpdate(query3);
-            System.out.println("DELETE");
         }
         catch (SQLException e){
             System.out.println(e.toString());
@@ -242,7 +241,7 @@ public class DbConnection {
             stmt.setString(2, app.getRequestToken());
             stmt.setString(3, null);
             now = new Timestamp(System.currentTimeMillis());
-            now.setTime(now.getTime() + TimeUnit.DAYS.toMillis(120));
+            now.setTime(now.getTime() + TimeUnit.HOURS.toMillis(1));
             stmt.setTimestamp(4, now);
             stmt.executeUpdate();
 
@@ -349,6 +348,7 @@ public class DbConnection {
     */
     public boolean createTransaction(int user, int recipient, String description, float amount) throws SQLException {
         // don't allow users to send negative amounts
+        removeOldTokens();
         if(amount < 0) {
             return false;
         }
@@ -398,6 +398,7 @@ public class DbConnection {
     * @param user The unique ID of the user to look up transactions for.
     */
     public Transactions getTransactions(int user) throws SQLException {
+        removeOldTokens();
         PreparedStatement stmt = null;
         String query = "SELECT * FROM transactions WHERE uid=? ORDER BY tid DESC;";
 
