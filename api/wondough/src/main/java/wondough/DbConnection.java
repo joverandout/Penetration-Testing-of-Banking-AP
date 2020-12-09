@@ -150,7 +150,7 @@ public class DbConnection {
                 user.setSalt(rs.getString("salt"));
                 user.setIterations(rs.getInt("iterations"));
                 user.setKeySize(rs.getInt("keySize"));
-                System.out.println("\nID2"+user.getID());
+                System.out.println("\nID3"+user.getID());
                 return user;
             }
         } catch (SQLException e ) {
