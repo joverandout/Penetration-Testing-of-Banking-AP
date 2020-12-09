@@ -10,6 +10,8 @@ public class WondoughUser {
 
     public WondoughUser(int id, String username) {
         this.username = username;
+        this.id = id;
+        //fix for number 6
     }
 
     public int getID() {

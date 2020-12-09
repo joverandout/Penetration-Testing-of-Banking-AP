@@ -143,11 +143,14 @@ public class DbConnection {
             ResultSet rs = stmt.executeQuery();
 
             if(rs.next()) {
+                System.out.println("\nID1"+rs.getInt(1));
+                System.out.println("\nID2"+rs.getInt("id"));
                 WondoughUser user = new WondoughUser(rs.getInt("id"), rs.getString("username"));
                 user.setHashedPassword(rs.getString("password"));
                 user.setSalt(rs.getString("salt"));
                 user.setIterations(rs.getInt("iterations"));
                 user.setKeySize(rs.getInt("keySize"));
+                System.out.println("\nID2"+user.getID());
                 return user;
             }
         } catch (SQLException e ) {
@@ -197,6 +200,9 @@ public class DbConnection {
         String query = "INSERT INTO authorised_apps (user,requestToken,accessToken) VALUES (?,?,?);";
 
         try {
+            System.out.println(user.getID());
+            System.out.println(user.getUsername());
+
             WondoughApp app = new WondoughApp(user.getID());
             app.setRequestToken(Integer.toString(this.largestRequestToken(), 10));
             app.setAccessToken(Integer.toString(this.largestAccessToken(), 10));
