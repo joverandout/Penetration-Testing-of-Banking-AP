@@ -143,14 +143,11 @@ public class DbConnection {
             ResultSet rs = stmt.executeQuery();
 
             if(rs.next()) {
-                System.out.println("\nID1"+rs.getInt(1));
-                System.out.println("\nID2"+rs.getInt("id"));
                 WondoughUser user = new WondoughUser(rs.getInt("id"), rs.getString("username"));
                 user.setHashedPassword(rs.getString("password"));
                 user.setSalt(rs.getString("salt"));
                 user.setIterations(rs.getInt("iterations"));
                 user.setKeySize(rs.getInt("keySize"));
-                System.out.println("\nID3"+user.getID());
                 return user;
             }
         } catch (SQLException e ) {

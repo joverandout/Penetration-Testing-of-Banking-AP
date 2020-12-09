@@ -32,7 +32,7 @@ the database.
    return user;
 \end{minted}
 It then transpired that passing the id into the constructor of \verb|WondoughUser| was pointless since the constructor never set the value. Therefore I added the following line
-to fix the issue.
+to fix the issue. This is the user the tokens are created from and much more causing the root of the issue.
 \begin{minted}{java}
    public WondoughUser(int id, String username) {
        this.username = username;

@@ -183,8 +183,8 @@ public class Program {
             test5 tests5 = new test5();
             tests5.test();
 
-            // test6 tests6 = new test6();
-            // tests6.test();
+            test6 tests6 = new test6();
+            tests6.test();
         }
         catch(Exception ex) {
             System.out.println(ex.toString());
