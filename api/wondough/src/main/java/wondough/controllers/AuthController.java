@@ -2,6 +2,7 @@ package wondough.controllers;
 
 import java.util.*;
 import java.net.*;
+import java.security.Timestamp;
 import java.sql.SQLException;
 
 import spark.*;
@@ -12,11 +13,7 @@ public class AuthController {
     /** Serve the auth page (GET request) */
     public static Route serveAuthPage = (Request request, Response response) -> {
         Map<String, Object> model = new HashMap<>();
-
-        System.out.println("1."+request.queryParams("app"));
-        System.out.println("2."+Integer.parseInt(request.queryParams("app")));
-        System.out.println(Program.getInstance().getDbConnection().lookupApp(Integer.parseInt(request.queryParams("app"))));
-
+        
         String name = Program.getInstance().getDbConnection().lookupApp(Integer.parseInt(request.queryParams("app")));
 
         if(name == null) {
@@ -34,6 +31,7 @@ public class AuthController {
 
     public static Route handleExchange = (Request request, Response response) -> {
         // retrieve the request token from the request
+        Program.getInstance().getDbConnection().removeOldTokens();
         String token = request.queryParams("token");
 
         String accessToken = Program.getInstance().getDbConnection().exchangeToken(token);
@@ -47,7 +45,10 @@ public class AuthController {
         }
     };
 
+   
     public static Route handleAuth = (Request request, Response response) -> {
+        Program.getInstance().getDbConnection().removeOldTokens();
+
         Map<String, Object> model = new HashMap<>();
         model.put("target", request.queryParams("target"));
         model.put("appname", request.queryParams("appname"));

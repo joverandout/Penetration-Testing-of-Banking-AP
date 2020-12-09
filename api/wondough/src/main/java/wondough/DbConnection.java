@@ -1,7 +1,14 @@
 package wondough;
 
 import org.apache.commons.lang.StringEscapeUtils;
+
+import jdk.nashorn.api.tree.StatementTree;
+
 import java.sql.*;
+import java.util.Calendar;
+import java.time.LocalDate; // import the LocalDate class
+import java.time.LocalDateTime;
+import java.util.concurrent.TimeUnit;
 
 /**
 * Represents a connection to the not-quite-as-volatile database.
@@ -187,6 +194,22 @@ public class DbConnection {
         return null;
     }
 
+    public void removeOldTokens(){
+        try{
+            Timestamp now = new Timestamp(System.currentTimeMillis()); 
+            String now2 = now.toString();
+            System.out.println(now2);
+            String query3 = "DELETE FROM authorised_apps WHERE expiryDate < "+ now2 + ";";
+            Statement stmt2 = this.connection.createStatement();
+            int rs = stmt2.executeUpdate(query3);
+            System.out.println("DELETE");
+        }
+        catch (SQLException e){
+            System.out.println(e.toString());
+        }
+    }
+
+
     /**
     * Authorises a new application to perform actions on behalf
     * of the specified user.
@@ -194,27 +217,42 @@ public class DbConnection {
     */
     public WondoughApp createApp(WondoughUser user) throws SQLException {
         PreparedStatement stmt = null;
-        String query = "INSERT INTO authorised_apps (user,requestToken,accessToken) VALUES (?,?,?);";
+        String query = "INSERT INTO authorised_apps (user,requestToken,accessToken,expiryDate) VALUES (?,?,?,?);";
 
         try {
             System.out.println(user.getID());
             System.out.println(user.getUsername());
 
             WondoughApp app = new WondoughApp(user.getID());
-            app.setRequestToken(Integer.toString(this.largestRequestToken(), 10));
-            app.setAccessToken(Integer.toString(this.largestAccessToken(), 10));
+            app.setRequestToken(Program.getInstance().getSecurityConfiguration().generateSalt());
+            app.setAccessToken(Program.getInstance().getSecurityConfiguration().generateSalt());
+
+            stmt = this.connection.prepareStatement(query);
+            stmt.setInt(1, user.getID());
+            stmt.setString(2, null);
+            stmt.setString(3, app.getAccessToken());
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+            now.setTime(now.getTime() + TimeUnit.MINUTES.toMillis(30));
+            stmt.setTimestamp(4, now);
+            stmt.executeUpdate();
 
             stmt = this.connection.prepareStatement(query);
             stmt.setInt(1, user.getID());
             stmt.setString(2, app.getRequestToken());
-            stmt.setString(3, app.getAccessToken());
+            stmt.setString(3, null);
+            now = new Timestamp(System.currentTimeMillis());
+            now.setTime(now.getTime() + TimeUnit.DAYS.toMillis(120));
+            stmt.setTimestamp(4, now);
             stmt.executeUpdate();
+
+            stmt.close();
+           
             return app;
         } catch (SQLException e ) {
             throw e;
         } finally {
             if (stmt != null) { stmt.close(); }
-        }
+        }        
     }
 
     /**

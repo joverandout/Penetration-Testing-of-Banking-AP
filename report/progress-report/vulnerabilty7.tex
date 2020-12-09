@@ -1,4 +1,4 @@
-\section{Vulnerability: Tokens have limited range and don't expire}
+\section{Vulnerability: Tokens are 1-10 and don't expire}
 \label{sec:background}
 \textbf{Description:} The access tokens on the website have 2 key issues. Firstly there are only ten eleven tokens availabe (0 through to 10). Secondly the tokens have no expiry
 date and as such if a hacker were to gain access to a token through for example Javascript injection as seen in vulnerability 3, he could use it to keep permanent access to a
@@ -21,4 +21,17 @@ From here I was able to change the token to one associated with user 0 (from \te
 \end{figure}\\
 
 \\ \\
-\textbf{Mitigation:} 
+\textbf{Mitigation:} The first issue of the 0-10 occurs in \verb|dbConnection| where the following code is used to create the tokens id:\\
+\begin{minted}{java}
+app.setRequestToken(Integer.toString(this.largestRequestToken(), 10));
+app.setAccessToken(Integer.toString(this.largestAccessToken(), 10));
+\end{minted}
+I have therefore chosen to use the salt generation as the token since this is unique each time and much more complex. It also means that the issue of the access and request token
+being the same solved.
+\begin{minted}{java}
+String salt;
+salt = Program.getInstance().getSecurityConfiguration().generateSalt();
+app.setRequestToken(salt);
+salt = Program.getInstance().getSecurityConfiguration().generateSalt();
+app.setAccessToken(salt);
+\end{minted}
