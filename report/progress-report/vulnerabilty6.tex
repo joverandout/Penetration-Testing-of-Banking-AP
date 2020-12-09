@@ -7,7 +7,7 @@ when it was observed that the tokens created were all associated with the user w
    \centering
    \includegraphics[width=0.5\textwidth]{figs/token1.png}
    \caption{The table of tokens showing each was associated with the user 0}
-   \label{fig3}
+   \label{figvun6a}
  \end{figure}\\
 This would allow all users access to user 0's account. This is a critically important vulnerability since it could be accidentally exploited by well meaning users as well as hackers.
 It is also a vulnerability that requires no technical knowledge to exploit and this low skill ceiling makes it of particular threat. If combined with the fact that the bank used
@@ -39,4 +39,10 @@ to fix the issue. This is the user the tokens are created from and much more cau
        this.id = id;//added line
    }
 \end{minted}
-From here I devised an automated test to call the \verb|getUser| command to test that the user returned shared the username and id of the functions parameters.
+From here I devised an automated test to call the \verb|getUser| command to test that the user returned shared the username and id of the functions parameters. The test successfully passed each time.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figs/hackerbalance.png}
+    \caption{After fixing the constructor the correct balance and transactions were shown}
+    \label{figvun6}
+  \end{figure}

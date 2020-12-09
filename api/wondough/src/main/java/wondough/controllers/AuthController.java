@@ -68,8 +68,6 @@ public class AuthController {
         try {
             user = Program.getInstance().getDbConnection().getUser(username);
 
-            System.out.println("ID3"+ user.getID());
-
             if(user == null) {
                 model.put("error", "No such user!");
                 return ViewUtil.render(request, model, "/velocity/auth.vm");

@@ -26,7 +26,6 @@ public class test6 {
             SecurityConfiguration securityConfiguration = Program.getInstance().getSecurityConfiguration();
             Connection dbCon = DriverManager.getConnection("jdbc:sqlite:" + "wondough.db");
 
-
             WondoughUser testUser6 = connection.getUser("hacker@wondoughbank.com");
 
             String query = "SELECT id FROM users WHERE username='hacker@wondoughbank.com' LIMIT 1;";
