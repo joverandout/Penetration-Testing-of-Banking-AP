@@ -1,4 +1,4 @@
-\section{Vulnerability: PBKDF2 Iterations & Salt Randomness}
+\section{Vulnerability: PBKDF2 Iterations \& keysize}
 \label{sec:background}
 \textbf{Description:} The password hashing in the wondough website uses PBKDF2. This pseudo random hashing algorithm has a field called 'iterations', which is the number of times
 the PRF will be applied to the password when deriving the key. The number iterations was deemed to need to be 1000 as early as 2000, and A Kerberos standard in 2005 recommended
@@ -14,7 +14,8 @@ the PRF will be applied to the password when deriving the key. The number iterat
     \hline
    \end{tabular}
    \end{center}
-The use of a salt has allowed the ability to use precomputed hashes (rainbow tables) to be reduced. It also prevents multiple passwords being tested together. \\ \\
+The use of a salt has allowed the ability to use precomputed hashes (rainbow tables) to be reduced. It also prevents multiple passwords being tested together. The use of a keysize
+as small as 16 is also very dangerous and it is reccomended thata key size of 124 is used \cite{keysize}\\ \\
 \textbf{Testing the Vulnerability:} A hacker could use an SQL injection attack (as previously demonstrated is possible on the wondough system) to retrieve hashed passwords of
 users. This means that given a low iteration he could much more easily and in a shorter time brute force the password. A brute force can take as little as 4 hours for 1000
 iterations as seen in the above table and consequently the average time to brute force 1 iteration is dangerously small. As such it is clear that the severity of this vulnerability
@@ -25,11 +26,9 @@ iteration size to 10,000\cite{10.1007/978-3-030-11437-4_8}. This should mean giv
 given that users should have to have a wide range of characters in their password. I updated the \verb|security.json| file which the program uses to determine its security
 configuration.
 \begin{minted}{json}
-   {
-   "iterations": "10000",
-   "keySize": "16"
-   }
+   {"iterations": "10000",
+   "keySize": "124"}
 \end{minted}
-Then to design automatic testing I created a new user the same way as I had done for vulnerability 4. For this I checked his iteration size was exactly 10,000 and if it was that
-meant the update to \verb|security.json| had correctly enhanced this security and meant that the chance of this vulnerability working being 100\% was no longer the case. Therefore
+Then to design automatic testing I created a new user the same way as I had done for vulnerability 4. For this I checked his iteration size was exactly 10,000 and keysize exactly 124 and if it was
+it meant the update to \verb|security.json| had correctly enhanced this security and meant that the chance of this vulnerability working being 100\% was no longer the case. Therefore
 a severe improvement.

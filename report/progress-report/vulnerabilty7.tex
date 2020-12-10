@@ -3,27 +3,29 @@
 \textbf{Description:} The salt in this website is made dependent on the day, that is for a given day ever instance of \verb|generateSalt()| will return the same value. The idea of a
 is to combat the use of rainbow tables. However by having a standard static salt for an entire day it is possible to extract and generate a new rainbow table. Since a user's salt is
 never change it is possible to extract the salt and a rainbow table will work for all users who created their accounts on the same day, and as such makes it easier for an attacker
-to target mulitple users at once \cite{salts1}. \\ \\
+to target multiple users at once \cite{salts1}. \\ \\
 \textbf{Testing the Vulnerability:} If a hacker knows the salt is hard-coded based on a particular day, lookup tables and rainbow tables can be built for that salt, to make it
-easier to crack hashes. An attacker could easily perform an SQL injection with an addtional \verb|SELECT salt FROM users| to gain access to the salt for a given user. From there
+easier to crack hashes. An attacker could easily perform an SQL injection with an additional \verb|SELECT salt FROM users| to gain access to the salt for a given user. From there
 all they need to do is apply the salt to each password guess before they hash it \cite{salts2}. An attacker could make educated guesses without having access to the salts about the days on which passwords were
-made. For example if an account is sanwiched by two others with the same hash then those outer two must have the same salt and as such the same salt. As such the account in the 
+made. For example if an account is sandwiched by two others with the same hash then those outer two must have the same salt and as such the same salt. As such the account in the
 middle has been compromised by the fact that the three accounts all share a salt since it is obvious that the middle account must share the salt of the account before and after
 it.\\ \\
 \textbf{Mitigation:} In order for the salts to be secure a salt \textbf{must be random and unique per user}. If the salt is short it is possible for an attacker to build a
 lookup table for each possible salt. If the salt is only three ASCII characters, there are only 95x95x95 or 857,375 possible salts \cite{salts1}. That may seem large however if
-only 1 MB of the most common passwords are stored the entire rainbow table accounting for all possible salts will be under a terrabyte. It is true that a good practice is that a
+only 1 MB of the most common passwords are stored the entire rainbow table accounting for all possible salts will be under a terabyte. It is true that a good practice is that a
 salt should be at least of the same length as the output of the hash function \cite{6516321}. Since the keysize of the pbkdf2 hash function used by Wondough is 16 I have gone to 20 bytes to
-be ensure maximum security. I imported the \verb|secureRandom| package to be used in the new method of salt generation, which works as follows:
+ensure maximum security. I imported the \verb|secureRandom| package to be used in the new method of salt generation, which works as follows:
 \begin{minted}{java}
-    SecureRandom randomy = new SecureRandom();
-    //generate a random number
-    byte bytes[] = new byte[20];
-    //assign space for the salt
-    randomy.nextBytes(bytes);
-    Base64.Encoder encoder = Base64.getEncoder();
-    //encode the salt and return the string
-    return encoder.encodeToString(bytes);
+   public String generateSalt() {
+       SecureRandom randomy = new SecureRandom();
+       //generate a random number
+       byte bytes[] = new byte[20];
+       //assign space for the salt
+       randomy.nextBytes(bytes);
+       Base64.Encoder encoder = Base64.getEncoder();
+       //encode the salt and return the string
+       return encoder.encodeToString(bytes);
+   }
 \end{minted}
 The automated test for this vulnerability would generate 100,000 salts and check all of them were different The check works by placing all the salts in a hash set and checking the
-size of the hash set is equal to the size of the array. It passed every time and as such the vulnerability is extinguished.
+size of the hash set is equal to the size of the array. It passes every time and as such the vulnerability is extinguished.

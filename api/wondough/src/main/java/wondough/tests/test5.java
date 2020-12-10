@@ -8,7 +8,7 @@ import static wondough.SessionUtil.*;
 public class test5 {
 
 	public void test() {
-        String result = checkUserCantTransferMoreThanBalance(); 
+        String result = checkIterationsAndKeySize(); 
         System.out.println();
         System.out.print("Vulnerability 5:\t\t");
         if(result.equals("PASSED")) System.out.println((char)27 + "[32m" + result);
@@ -17,7 +17,7 @@ public class test5 {
         System.out.println("\tInsufficient iterations");
     }
 
-    public String checkUserCantTransferMoreThanBalance(){		
+    public String checkIterationsAndKeySize(){		
         try{
             DbConnection connection = new DbConnection("wondough.db");
             SecurityConfiguration securityConfiguration = Program.getInstance().getSecurityConfiguration();
@@ -30,6 +30,8 @@ public class test5 {
             
             if(testuser1.getIterations() == 1) return "FAILED";
             if(testuser1.getIterations() != 10000) return "FAILED";
+            if(testuser1.getKeySize() == 16) return "FAILED";
+            if(testuser1.getKeySize() != 124) return "FAILED";
 
             try{
                 Connection connectionToDelete = DriverManager.getConnection("jdbc:sqlite:" + "wondough.db");
