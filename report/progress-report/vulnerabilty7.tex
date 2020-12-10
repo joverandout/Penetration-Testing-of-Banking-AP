@@ -13,7 +13,7 @@ it.\\ \\
 \textbf{Mitigation:} In order for the salts to be secure a salt \textbf{must be random and unique per user}. If the salt is short it is possible for an attacker to build a
 lookup table for each possible salt. If the salt is only three ASCII characters, there are only 95x95x95 or 857,375 possible salts \cite{salts1}. That may seem large however if
 only 1 MB of the most common passwords are stored the entire rainbow table accounting for all possible salts will be under a terabyte. It is true that a good practice is that a
-salt should be at least of the same length as the output of the hash function \cite{6516321}. Since the keysize of the pbkdf2 hash function used by Wondough is 16 I have gone to 20 bytes to
+salt should be at least 16 bytes \cite{6516321}. I have gone to 20 bytes to
 ensure maximum security. I imported the \verb|secureRandom| package to be used in the new method of salt generation, which works as follows:
 \begin{minted}{java}
    public String generateSalt() {
