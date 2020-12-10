@@ -198,9 +198,7 @@ public class DbConnection {
     public void removeOldTokens(){
         try{
             long ut1 = System.currentTimeMillis();
-            System.out.println(ut1);
             String query3 = "DELETE FROM authorised_apps WHERE expiryDate < "+ ut1 + ";";
-            System.out.println(query3);
             Statement stmt2 = this.connection.createStatement();
             int rs = stmt2.executeUpdate(query3);
         }
@@ -220,9 +218,6 @@ public class DbConnection {
         String query = "INSERT INTO authorised_apps (user,requestToken,accessToken,expiryDate) VALUES (?,?,?,?);";
 
         try {
-            System.out.println(user.getID());
-            System.out.println(user.getUsername());
-
             WondoughApp app = new WondoughApp(user.getID());
             app.setRequestToken(Program.getInstance().getSecurityConfiguration().generateSalt());
             app.setAccessToken(Program.getInstance().getSecurityConfiguration().generateSalt());

@@ -14,9 +14,11 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
+import java.security.SecureRandom;
 import java.util.*;
 
 /**
@@ -100,8 +102,14 @@ public class SecurityConfiguration {
     * Generates a cryptographically secure salt.
     */
     public String generateSalt() {
-        String salt = new SimpleDateFormat("yyyy").format(Calendar.getInstance().getTime());
-        return this.md5(salt);
+        SecureRandom randomy = new SecureRandom();
+        //generate a random number
+        byte bytes[] = new byte[20];
+        //assign space for the salt
+        randomy.nextBytes(bytes);
+        Base64.Encoder encoder = Base64.getEncoder();
+        //encode the salt and return the string
+        return encoder.encodeToString(bytes);
     }
 
     /**
