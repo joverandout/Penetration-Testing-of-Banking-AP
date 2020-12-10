@@ -29,7 +29,7 @@ public class test9 {
             DbConnection connection = new DbConnection("wondough.db");
             SecurityConfiguration securityConfiguration = Program.getInstance().getSecurityConfiguration();
 
-            WondoughUser testuser1 = new WondoughUser(1, "test9User@wondoughbank.com");
+            WondoughUser testuser1 = new WondoughUser(3, "test9User@wondoughbank.com");
             testuser1.setSalt(securityConfiguration.generateSalt());
             testuser1.setHashedPassword(securityConfiguration.pbkdf2("password", testuser1.getSalt()));
             testuser1.setIterations(securityConfiguration.getIterations());
@@ -90,6 +90,4 @@ public class test9 {
         }
     }
 }
-
-//REGEX-BASED STRNG SAITISATION
 

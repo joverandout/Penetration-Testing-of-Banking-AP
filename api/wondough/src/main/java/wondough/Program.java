@@ -23,7 +23,7 @@ import wondough.tests.test3;
 import wondough.tests.test4;
 import wondough.tests.test5;
 import wondough.tests.test6;
-
+import wondough.tests.test7;
 
 import wondough.tests.test9;
 
@@ -187,7 +187,8 @@ public class Program {
             test6 tests6 = new test6();
             tests6.test();
 
-
+            test7 tests7 = new test7();
+            tests7.test();
 
             test9 tests9 = new test9();
             tests9.test();
