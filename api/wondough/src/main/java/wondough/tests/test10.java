@@ -34,14 +34,12 @@ public class test10 {
         try {
             String[] whitelists = AuthController.getSafeSites();
 
-            
             URL url = new URL("http://localhost:8000/auth?");
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
             con.setRequestMethod("POST");
-
             con.setDoOutput(true);
             DataOutputStream out = new DataOutputStream(con.getOutputStream());
-            out.writeBytes("username=intern@wondoughbank.com&password=password&appname=1&target=https://www.google.com");
+            out.writeBytes("username=intern@wondoughbank.com&password=password&appname=1&target=https://www.bbc.co.uk");
             out.flush();
             out.close();
 
@@ -50,11 +48,35 @@ public class test10 {
 
             System.out.println(status);
 
-            if(status == 302) return "failed";
-            else return "passed";
+            if(status == 302) return "FAILED";
         }
         catch(IOException ex) {
             return "FAILED" + ex.toString();
         }
+
+        try {
+            String[] whitelists = AuthController.getSafeSites();
+
+            URL url = new URL("http://localhost:8000/auth?");
+            HttpURLConnection con = (HttpURLConnection)url.openConnection();
+            con.setRequestMethod("POST");
+            con.setDoOutput(true);
+            DataOutputStream out = new DataOutputStream(con.getOutputStream());
+            out.writeBytes("username=intern@wondoughbank.com&password=password&appname=1&target=https://http://localhost:1464/oauth");
+            out.flush();
+            out.close();
+
+            int status = con.getResponseCode();
+            con.disconnect();
+
+            System.out.println(status);
+
+            if(status != 200) return "FAILED";
+        }
+        catch(IOException ex) {
+            return "FAILED" + ex.toString();
+        }
+
+        return "PASSED";
     }
 }
