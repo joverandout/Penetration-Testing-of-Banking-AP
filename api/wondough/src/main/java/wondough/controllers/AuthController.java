@@ -9,7 +9,15 @@ import spark.*;
 import wondough.*;
 import static wondough.SessionUtil.*;
 
+
 public class AuthController {
+    private static String[] safeSites = {"http://github.com", "http://www.google.co.uk", "http://warwick.ac.uk/fac/sci/dcs/", "http://localhost:1464/oauth"};
+    //sites that are considered safe. I have edited the sample-client such that it no longer runs on a random port but instead http://localhost:1464/oauth
+
+    public static String[] getSafeSites(){
+        return safeSites;
+    }
+
     /** Serve the auth page (GET request) */
     public static Route serveAuthPage = (Request request, Response response) -> {
         Map<String, Object> model = new HashMap<>();
@@ -48,6 +56,9 @@ public class AuthController {
    
     public static Route handleAuth = (Request request, Response response) -> {
         Program.getInstance().getDbConnection().removeOldTokens();
+
+        System.out.println("request: " + request);
+        System.out.println("response: " + response);
 
         Map<String, Object> model = new HashMap<>();
         model.put("target", request.queryParams("target"));
@@ -121,13 +132,27 @@ public class AuthController {
             // redirect to the target URL and append the token;
             // the token is hashed for security so that its
             // value cannot be read
-            response.redirect(
+            System.out.println("QUERY LOGIN REDIRECT-> " + getQueryLoginRedirect(request));
+            if(trustedURL(getQueryLoginRedirect(request))){
+                response.redirect(
                 getQueryLoginRedirect(request) +
                 "?token=" + URLEncoder.encode(config.md5(app.getRequestToken()), "UTF-8")
-            );
+                );
+            }
+            else{
+                model.put("error", getQueryLoginRedirect(request) + " isn't a trusted website");
+            }
+            
         }
 
         return ViewUtil.render(request, model, "/velocity/auth.vm");
     };
+
+    public static boolean trustedURL(String url){
+        for (int i = 0; i < safeSites.length; i++) {
+            if(url.equals(safeSites[i])) return true;
+        }
+        return false;
+    }
 
 }

@@ -80,8 +80,8 @@ public class Program {
     private void run() {
         this.loadWondoughPort();
         
-        // we will run on a random port
-        Spark.port(0);
+        // no lonER runs on a random port since I need to whitelist some sites
+        Spark.port(1464);
 
         // tell the Spark framework where to find static files
         staticFiles.location("/static");

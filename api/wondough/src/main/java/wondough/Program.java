@@ -26,7 +26,7 @@ import wondough.tests.test6;
 import wondough.tests.test7;
 
 import wondough.tests.test9;
-
+import wondough.tests.test10;
 
 
 /**
@@ -111,6 +111,8 @@ public class Program {
         }
     }
 
+
+
     /**
     * Runs the program.
     */
@@ -192,6 +194,9 @@ public class Program {
 
             test9 tests9 = new test9();
             tests9.test();
+
+            test10 tests10 = new test10();
+            tests10.test();
         }
         catch(Exception ex) {
             System.out.println(ex.toString());
