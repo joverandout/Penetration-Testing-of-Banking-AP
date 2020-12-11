@@ -31,38 +31,13 @@ public class test10 {
     }
 
     public String checkwhitelist(){	
-        // try{
-        //     URL[] urls = new URL[5];
-        //     String[] whitelists = AuthController.getSafeSites();
-
-        //     for (int i = 0; i < urls.length; i++) {
-        //         if(i < 4) urls[i] = new URL("http://localhost:" + Spark.port() + "/auth");//?username=intern@wondoughbank.com&password=password&app=1&target=" + whitelists[i]);
-        //         else urls[i] =  new URL("http://localhost:" + Spark.port() + "/auth");//?username=intern@wondoughbank.com&password=password&app=1&target=http://amazon.co.uk");
-        //     }
-        //     for (int j = 0; j < urls.length; j++) {
-        //         HttpURLConnection webconnection = (HttpURLConnection)urls[j].openConnection();
-        //         webconnection.setRequestMethod("POST");
-
-        //         webconnection.setDoOutput(true);
-        //         int status = webconnection.getResponseCode();
-        //         System.out.println(status);
-        //         webconnection.disconnect();
-        //     }
-        //     return "FAILED";
-        // }
-        // catch(IOException e){
-        //     return "ERROR"+e.toString();
-        // }
-
         try {
             String[] whitelists = AuthController.getSafeSites();
 
             
-            URL url = new URL("http://localhost:8000/auth");
+            URL url = new URL("http://localhost:8000/auth?");
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
             con.setRequestMethod("POST");
-
-            // write the request token to the request body
 
             con.setDoOutput(true);
             DataOutputStream out = new DataOutputStream(con.getOutputStream());
@@ -83,4 +58,3 @@ public class test10 {
         }
     }
 }
-

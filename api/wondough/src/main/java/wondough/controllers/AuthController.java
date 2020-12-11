@@ -58,6 +58,9 @@ public class AuthController {
     public static Route handleAuth = (Request request, Response response) -> {
         Program.getInstance().getDbConnection().removeOldTokens();
 
+        System.out.println("TRUST1");
+
+
         Map<String, Object> model = new HashMap<>();
         model.put("target", request.queryParams("target"));
         model.put("appname", request.queryParams("appname"));
@@ -125,7 +128,7 @@ public class AuthController {
             return ViewUtil.render(request, model, "/velocity/auth.vm");
         }
 
-                // redirect the user somewhere, if this was requested
+        // redirect the user somewhere, if this was requested
         if (getQueryLoginRedirect(request) != null) {
             // redirect to the target URL and append the token;
             // the token is hashed for security so that its
