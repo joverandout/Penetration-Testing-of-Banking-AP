@@ -35,21 +35,27 @@ public class test10 {
             URL[] urls = new URL[5];
             String[] whitelists = AuthController.getSafeSites();
 
-            for (int i = 0; i < whitelists.length; i++) {
-                urls[i] = new URL("http://localhost:" + Spark.port() + "/auth?app=1&target=" + whitelists[i]);
+            for (int i = 0; i < urls.length; i++) {
+                if(i < 4) urls[i] = new URL("http://localhost:" + Spark.port() + "/auth?intern@wondoughbank.com&password=password&app=1&target=" + whitelists[i]);
+                else urls[i] =  new URL("http://localhost:" + Spark.port() + "/auth?intern@wondoughbank.com&password=password&app=1&target=http://amazon.co.uk");
             }
-            urls[4] = new URL("http://localhost:" + Spark.port() + "/auth?app=1&target=http://localhost:1464/oauth");
-
             for (int j = 0; j < urls.length; j++) {
-                HttpURLConnection webconnection = (HttpURLConnection)urls[j].openConnection();
-                int status = webconnection.getResponseCode();
-                System.out.println(status);
+                try{
+                    HttpURLConnection webconnection = (HttpURLConnection)urls[j].openConnection();
+                    int status = webconnection.getResponseCode();
+                    System.out.println(status);
+                    webconnection.disconnect();
+                }
+                catch(NumberFormatException e){
+                    System.out.println("FAILED");
+                }
+
             }
 
-            return null;
+            return "FAILED";
         }
         catch(IOException e){
-            return e.toString();
+            return "ERROR"+e.toString();
         }
     }
 }

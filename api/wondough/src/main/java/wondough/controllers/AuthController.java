@@ -134,6 +134,7 @@ public class AuthController {
             // value cannot be read
             System.out.println("QUERY LOGIN REDIRECT-> " + getQueryLoginRedirect(request));
             if(trustedURL(getQueryLoginRedirect(request))){
+                System.out.println("TRUSTED");
                 response.redirect(
                 getQueryLoginRedirect(request) +
                 "?token=" + URLEncoder.encode(config.md5(app.getRequestToken()), "UTF-8")
