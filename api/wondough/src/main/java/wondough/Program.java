@@ -142,7 +142,7 @@ public class Program {
 
 
             // pick an arbitrary port
-            port(0);
+            port(8000);
 
             // tell the Spark framework where to find static files
             staticFiles.location("/static");

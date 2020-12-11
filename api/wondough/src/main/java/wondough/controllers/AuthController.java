@@ -11,7 +11,7 @@ import static wondough.SessionUtil.*;
 
 
 public class AuthController {
-    private static String[] safeSites = {"http://github.com", "http://www.google.co.uk", "http://warwick.ac.uk/fac/sci/dcs/", "http://localhost:1464/oauth"};
+    private static String[] safeSites = {/*"http://github.com", "http://www.google.co.uk", "http://warwick.ac.uk/fac/sci/dcs/", */"http://localhost:1464/oauth"};
     //sites that are considered safe. I have edited the sample-client such that it no longer runs on a random port but instead http://localhost:1464/oauth
 
     public static String[] getSafeSites(){
@@ -42,6 +42,7 @@ public class AuthController {
         Program.getInstance().getDbConnection().removeOldTokens();
         String token = request.queryParams("token");
 
+
         String accessToken = Program.getInstance().getDbConnection().exchangeToken(token);
 
         if(accessToken == null) {
@@ -56,9 +57,6 @@ public class AuthController {
    
     public static Route handleAuth = (Request request, Response response) -> {
         Program.getInstance().getDbConnection().removeOldTokens();
-
-        System.out.println("request: " + request);
-        System.out.println("response: " + response);
 
         Map<String, Object> model = new HashMap<>();
         model.put("target", request.queryParams("target"));
@@ -127,21 +125,25 @@ public class AuthController {
             return ViewUtil.render(request, model, "/velocity/auth.vm");
         }
 
-        // redirect the user somewhere, if this was requested
+                // redirect the user somewhere, if this was requested
         if (getQueryLoginRedirect(request) != null) {
             // redirect to the target URL and append the token;
             // the token is hashed for security so that its
             // value cannot be read
-            System.out.println("QUERY LOGIN REDIRECT-> " + getQueryLoginRedirect(request));
+
+            // System.out.println("QUERY LOGIN REDIRECT-> " + getQueryLoginRedirect(request));
             if(trustedURL(getQueryLoginRedirect(request))){
-                System.out.println("TRUSTED");
+                System.out.println("TRUST");
+
                 response.redirect(
                 getQueryLoginRedirect(request) +
                 "?token=" + URLEncoder.encode(config.md5(app.getRequestToken()), "UTF-8")
                 );
             }
             else{
+                System.out.println("NO TRUST");
                 model.put("error", getQueryLoginRedirect(request) + " isn't a trusted website");
+                return ViewUtil.render(request, model, "/velocity/auth.vm");
             }
             
         }
