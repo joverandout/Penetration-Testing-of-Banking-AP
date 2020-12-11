@@ -11,7 +11,7 @@ import static wondough.SessionUtil.*;
 
 
 public class AuthController {
-    private static String[] safeSites = {"http://localhost:1464/oauth"};
+    private static String[] safeSites = {"http://localhost:1464/oauth", "https://warwick.ac.uk/fac/sci/dcs/"};
     //sites that are considered safe. I have edited the sample-client such that it no longer runs on a random port but instead http://localhost:1464/oauth
 
     public static String[] getSafeSites(){
@@ -141,7 +141,6 @@ public class AuthController {
             }
             else{
                 model.put("error", getQueryLoginRedirect(request) + " isn't a trusted website");
-                return ViewUtil.render(request, model, "/velocity/auth.vm");
             }
             
         }
@@ -149,6 +148,7 @@ public class AuthController {
         return ViewUtil.render(request, model, "/velocity/auth.vm");
     };
 
+    //Used to ensure only whitelisted sites can be redirected.
     public static boolean trustedURL(String url){
         for (int i = 0; i < safeSites.length; i++) {
             if(url.equals(safeSites[i])) return true;

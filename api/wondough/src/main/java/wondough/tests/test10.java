@@ -34,18 +34,18 @@ public class test10 {
         try {
             String[] whitelists = AuthController.getSafeSites();
 
-            URL url = new URL("http://localhost:8000/auth?");
+            URL url = new URL("http://localhost:"+ Spark.port() + "/auth?");
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
             con.setRequestMethod("POST");
             con.setDoOutput(true);
-            DataOutputStream out = new DataOutputStream(con.getOutputStream());
-            out.writeBytes("username=intern@wondoughbank.com&password=password&appname=1&target=https://www.bbc.co.uk");
-            out.flush();
-            out.close();
+            DataOutputStream bytes = new DataOutputStream(bytes.getOutputStream());
+            bytes.writeBytes("username=intern@wondoughbank.com&password=password&appname=1&target=https://www.bbc.co.uk");
+            bytes.flush();
+            bytes.close();
 
             int status = con.getResponseCode();
             con.disconnect();
-            if(status == 302) return "FAILED";
+            if(status == 302) return "FAILED"; //302 means the site has redirected to bbc.co.uk which is not a safe site so the test has failed
         }
         catch(IOException ex) {
             return "FAILED";
@@ -54,14 +54,14 @@ public class test10 {
         try {
             String[] whitelists = AuthController.getSafeSites();
 
-            URL url = new URL("http://localhost:8000/auth?");
+            URL url = new URL("http://localhost:"+ Spark.port() + "/auth?");
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
             con.setRequestMethod("POST");
             con.setDoOutput(true);
-            DataOutputStream out = new DataOutputStream(con.getOutputStream());
-            out.writeBytes("username=intern@wondoughbank.com&password=password&appname=1&target=https://http://localhost:1464/oauth");
-            out.flush();
-            out.close();
+            DataOutputStream bytes = new DataOutputStream(con.getOutputStream());
+            bytes.writeBytes("username=intern@wondoughbank.com&password=password&appname=1&target=https://http://localhost:1464/oauth");
+            bytes.flush();
+            bytes.close();
 
             int status = con.getResponseCode();
             con.disconnect();
