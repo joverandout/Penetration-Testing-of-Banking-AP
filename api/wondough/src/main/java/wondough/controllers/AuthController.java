@@ -58,8 +58,6 @@ public class AuthController {
     public static Route handleAuth = (Request request, Response response) -> {
         Program.getInstance().getDbConnection().removeOldTokens();
 
-        System.out.println("TRUST1");
-
 
         Map<String, Object> model = new HashMap<>();
         model.put("target", request.queryParams("target"));

@@ -45,13 +45,10 @@ public class test10 {
 
             int status = con.getResponseCode();
             con.disconnect();
-
-            System.out.println(status);
-
             if(status == 302) return "FAILED";
         }
         catch(IOException ex) {
-            return "FAILED" + ex.toString();
+            return "FAILED";
         }
 
         try {
@@ -69,12 +66,10 @@ public class test10 {
             int status = con.getResponseCode();
             con.disconnect();
 
-            System.out.println(status);
-
             if(status != 200) return "FAILED";
         }
         catch(IOException ex) {
-            return "FAILED" + ex.toString();
+            return "FAILED";
         }
 
         return "PASSED";
