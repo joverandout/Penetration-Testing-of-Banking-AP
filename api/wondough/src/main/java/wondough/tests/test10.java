@@ -38,7 +38,7 @@ public class test10 {
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
             con.setRequestMethod("POST");
             con.setDoOutput(true);
-            DataOutputStream bytes = new DataOutputStream(bytes.getOutputStream());
+            DataOutputStream bytes = new DataOutputStream(con.getOutputStream());
             bytes.writeBytes("username=intern@wondoughbank.com&password=password&appname=1&target=https://www.bbc.co.uk");
             bytes.flush();
             bytes.close();
