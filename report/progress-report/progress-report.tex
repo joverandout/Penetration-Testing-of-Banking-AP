@@ -22,6 +22,19 @@
 }
 \makeatother
 
+\usepackage{minted}
+\usepackage[
+backgroundcolor = gray!5
+, hidealllines=true
+]{mdframed}
+
+\surroundwithmdframed{minted}
+\usemintedstyle{lovelace}
+
+\setminted[text]{fontsize=\small}
+\setminted[java]{fontsize=\small}
+\setminted[sql]{fontsize=\small}
+
 %%%%%%%%%%%%%%%%%%%%
 
 \begin{document}

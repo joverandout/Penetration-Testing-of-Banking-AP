@@ -21,7 +21,13 @@ import static wondough.SessionUtil.*;
 public class test10 {
 
 	public void test() {
-        String result = checkwhitelist(); 
+        String result = "FAILED";
+        try{
+            result = checkwhitelist(); 
+        }
+        catch (Exception e){
+            result = "FAILED";
+        }
         System.out.println();
         System.out.print("Vulnerability 10:\t\t");
         if(result.equals("PASSED")) System.out.println((char)27 + "[32m" + result);

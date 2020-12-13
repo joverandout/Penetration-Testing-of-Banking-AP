@@ -133,19 +133,23 @@ public class AuthController {
             // value cannot be read
 
             // System.out.println("QUERY LOGIN REDIRECT-> " + getQueryLoginRedirect(request));
-            if(trustedURL(getQueryLoginRedirect(request))){
+            // if(trustedURL(getQueryLoginRedirect(request))){
                 response.redirect(
                 getQueryLoginRedirect(request) +
                 "?token=" + URLEncoder.encode(config.md5(app.getRequestToken()), "UTF-8")
                 );
-            }
-            else{
-                model.put("error", getQueryLoginRedirect(request) + " isn't a trusted website");
-            }
+            // }
+            // else{
+            //     model.put("error", getQueryLoginRedirect(request) + " isn't a trusted website");
+            // }
             
         }
-
-        return ViewUtil.render(request, model, "/velocity/auth.vm");
+        try{
+            return ViewUtil.render(request, model, "/velocity/auth.vm");
+        }
+        catch (IllegalStateException e){
+            return null;
+        }
     };
 
     //Used to ensure only whitelisted sites can be redirected.
