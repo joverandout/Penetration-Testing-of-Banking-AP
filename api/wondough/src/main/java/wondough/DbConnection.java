@@ -105,8 +105,8 @@ public class DbConnection {
     public boolean changePassword(String username, String hashedpassword, String newPassword) throws SQLException{
         WondoughUser user = getUser(username);
         String newhashedPassword = Program.getInstance().getSecurityConfiguration().pbkdf2(newPassword, user.getSalt(), user.getIterations(), user.getKeySize());
+        if(hashedpassword.equals(newhashedPassword)) return false;
         if(!(user.getHashedPassword().equals(hashedpassword))){
-            System.out.println(user.getHashedPassword() + "--" + hashedpassword);
             return false;
         }
         else{

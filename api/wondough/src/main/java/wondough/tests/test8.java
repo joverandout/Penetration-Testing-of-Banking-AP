@@ -31,6 +31,7 @@ public class test8 {
             if((connection.createUser(testuser1)) == false) return "FAILED";
 
             try{
+                if(connection.changePassword(testuser1.getUsername(), testuser1.getHashedPassword(), "password")) return "FAILED";
                 connection.changePassword(testuser1.getUsername(), testuser1.getHashedPassword(), "password2");
                 String hashed1 = "a", hashed2 = "b";
                 hashed1 = testuser1.getHashedPassword();
