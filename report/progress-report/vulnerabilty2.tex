@@ -11,16 +11,16 @@ to carry out further tests. \\ \\
 \textbf{Mitigation:} The process of creating a transaction occurs in the \verb|DbConnection| file in the \verb|createTransaction()| procedure. This feature already
 includes a check to ensure the amount in the transaction is not negative, as follows:
 \begin{minted}{java}
-    if(amount < 0) {
-            return false;
-    }
+if(amount < 0) {
+        return false;
+}
 \end{minted}
 And as such in a similar vein an additonal check was then added which makes use of the \verb|getTransactions(user)| and \verb|getAccountBalance()| functions to retrieve
 the user's balance and compare it to the amount. As follows:
 \begin{minted}{java}
-    if(amount > getTransactions(user).getAccountBalance()){
-        return false;
-    }
+if(amount > getTransactions(user).getAccountBalance()){
+    return false;
+}
 \end{minted}
 This was then tested manually with inputs larger than the balance, which were all not entered as transactions, followed by the balance itself and values lower than it, all of
 which the fix permitted. However I then set about automating this testing. The automatic testing seen in \verb|test2.java| creates a new user \textit{testUser}, it then tries

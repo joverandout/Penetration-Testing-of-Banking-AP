@@ -8,7 +8,7 @@ are viewable to all users. Thus any script injected will affect all users. This 
 since the malicious script is rendered automatically, therefore there is no requirement to individually target victims or to take them to a third party website.\\ \\
 \textbf{Testing the Vulnerability:} To test this vulnerability a series of JavaScript queries were entered as transactions. One of the most dangerous was the following:
 \begin{minted}{html}
-  <script>alert(document.cookie)</script>
+<script>alert(document.cookie)</script>
 \end{minted}
 Once injected upon the selection of \textit{List transactions} this will open a popup window which will display the users token.
 \begin{figure}[h]
@@ -24,12 +24,12 @@ they are simply to be printed and not interpreted as that symbol. As such they n
 \verb|&gt;| Then when the website encounters these new encodings it knows to print < and > rather than when it encounters < and > which means the start of something such as a
 script. In order to ensure the most rigorous security I imported a library to perform this encoding:
 \begin{minted}{java}
-  import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 \end{minted}
 From there the \verb|escapeHtml()| function was used to generate a new html encoded description of the transaction in the \verb|createTransaction()| function, which was then
 entered into the database in place of the description.
 \begin{minted}{java}
-  String encoded = StringEscapeUtils.escapeHtml(description);
+String encoded = StringEscapeUtils.escapeHtml(description);
 \end{minted}
 This works as required and if you look at the database you'll see the encoded raw text:
 \begin{figure}[h]

@@ -16,16 +16,16 @@ only 1 MB of the most common passwords are stored the entire rainbow table accou
 salt should be at least 16 bytes \cite{6516321}. I have gone to 20 bytes to
 ensure maximum security. I imported the \verb|secureRandom| package to be used in the new method of salt generation, which works as follows:
 \begin{minted}{java}
-   public String generateSalt() {
-       SecureRandom randomy = new SecureRandom();
-       //generate a random number
-       byte bytes[] = new byte[20];
-       //assign space for the salt
-       randomy.nextBytes(bytes);
-       Base64.Encoder encoder = Base64.getEncoder();
-       //encode the salt and return the string
-       return encoder.encodeToString(bytes);
-   }
+public String generateSalt() {
+    SecureRandom randomy = new SecureRandom();
+    //generate a random number
+    byte bytes[] = new byte[20];
+    //assign space for the salt
+    randomy.nextBytes(bytes);
+    Base64.Encoder encoder = Base64.getEncoder();
+    //encode the salt and return the string
+    return encoder.encodeToString(bytes);
+}
 \end{minted}
 The automated test for this vulnerability would generate 100,000 salts and check all of them were different The check works by placing all the salts in a hash set and checking the
 size of the hash set is equal to the size of the array. It passes every time and as such the vulnerability is extinguished.

@@ -14,23 +14,23 @@ username being used to create the new user did not already exist in the database
 returned a boolean value. True would be if the user had been created and otherwise false. Therefore at the beginning of create user we call \verb|getUser| on the username and
 if it doesn't return null then that username already exists in the database and as such the function should return false and go no further.
 \begin{minted}{java}
-   if(getUser(user.getUsername()) != null){
-       System.out.println("User already exists");
-       return false;
-   }
+if(getUser(user.getUsername()) != null){
+      System.out.println("User already exists");
+      return false;
+}
 \end{minted}
 Although I manually tested this in order to ensure its rigorousness an automated test was devised. This test performed 2 actions that both needed to be completed in order for
 the test to pass. Firstly a new user needed to be created:
 \begin{minted}{java}
-   WondoughUser testuser1 = new WondoughUser(1,
-       "test4User@wondoughbank.com");
-   testuser1.setSalt(securityConfiguration.generateSalt());
-   testuser1.setHashedPassword(securityConfiguration.pbkdf2("password",
-       testuser1.getSalt()));
-   testuser1.setIterations(securityConfiguration.getIterations());
-   testuser1.setKeySize(securityConfiguration.getKeySize());
- 
-   if((connection.createUser(testuser1)) == false) return "FAILED";
+WondoughUser testuser1 = new WondoughUser(1,
+      "test4User@wondoughbank.com");
+testuser1.setSalt(securityConfiguration.generateSalt());
+testuser1.setHashedPassword(securityConfiguration.pbkdf2("password",
+      testuser1.getSalt()));
+testuser1.setIterations(securityConfiguration.getIterations());
+testuser1.setKeySize(securityConfiguration.getKeySize());
+
+if((connection.createUser(testuser1)) == false) return "FAILED";
 \end{minted}
 As can be seen above if the user was not created then the test would fail. After this the test then attempted to create a second user with the same name directly after. The code
 for this was identical since we wanted the users to be the same. However, this time if the user was created the test failed:
@@ -41,10 +41,10 @@ Then if all that did not happen the test passed. The reason for having the condi
 connection was working since without this condition the test would pass if it just couldn't connect. Finally I performed some clearing up of the database such that the test data
 was removed since it did not represent a real system user and it also needed to be removed so the test would work again next time:
 \begin{minted}{java}
-   String query ="DELETE FROM users"
-                +"WHERE username='test4User@wondoughbank.com'";
-   Statement stmt = connectionToDelete.createStatement();
-   stmt.executeUpdate(query);
-   return "PASSED";
+String query ="DELETE FROM users"
+               +"WHERE username='test4User@wondoughbank.com'";
+Statement stmt = connectionToDelete.createStatement();
+stmt.executeUpdate(query);
+return "PASSED";
 \end{minted}
 This test passed every time and as such this vulnerability can be considered thoroughly mitigated.

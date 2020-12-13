@@ -20,24 +20,24 @@ cause trouble. This could make the vulnerability a further threat since an attac
 meant that the issue was not in the fetching of the id from the database. Whilst id 3 printed 0 meaning the issue occured in the creation of the new user from the values from
 the database.
 \begin{minted}{java}
-   System.out.println("\nID1"+rs.getInt(1));
-   System.out.println("\nID2"+rs.getInt("id"));
-   WondoughUser user = new WondoughUser(rs.getInt("id"),
-       rs.getString("username"));
-   user.setHashedPassword(rs.getString("password"));
-   user.setSalt(rs.getString("salt"));
-   user.setIterations(rs.getInt("iterations"));
-   user.setKeySize(rs.getInt("keySize"));
-   System.out.println("\nID3"+user.getID());
-   return user;
+System.out.println("\nID1"+rs.getInt(1));
+System.out.println("\nID2"+rs.getInt("id"));
+WondoughUser user = new WondoughUser(rs.getInt("id"),
+    rs.getString("username"));
+user.setHashedPassword(rs.getString("password"));
+user.setSalt(rs.getString("salt"));
+user.setIterations(rs.getInt("iterations"));
+user.setKeySize(rs.getInt("keySize"));
+System.out.println("\nID3"+user.getID());
+return user;
 \end{minted}
 It then transpired that passing the id into the constructor of \verb|WondoughUser| was pointless since the constructor never set the value. Therefore I added the following line
 to fix the issue. This is the user the tokens are created from and much more causing the root of the issue.
 \begin{minted}{java}
-   public WondoughUser(int id, String username) {
-       this.username = username;
-       this.id = id;//added line
-   }
+public WondoughUser(int id, String username) {
+    this.username = username;
+    this.id = id;//added line
+}
 \end{minted}
 From here I devised an automated test to call the \verb|getUser| command to test that the user returned shared the username and id of the functions parameters. The test successfully passed each time.
 \begin{figure}[h]

@@ -5,16 +5,16 @@
 determine if the username exists in the database. However this does not make use of \textit{prepared statements} but rather constructs the SQL query using string concatenation.
 This allows the user to use the common technique of including an \textit{OR} followed by a comment to finish the line to gain access. This is demonstrated below:
 \begin{minted}{text}
-   Username inputted: John
+Username inputted: John
 \end{minted}
 \begin{minted}{sql}
-   SQL: SELECT * FROM users WHERE username='John' LIMIT 1;
+SQL: SELECT * FROM users WHERE username='John' LIMIT 1;
 \end{minted}
 \begin{minted}{text}
-   Username inputted: blank' OR 1=1;--
+Username inputted: blank' OR 1=1;--
 \end{minted}
 \begin{minted}{sql}
-   SQL: SELECT * FROM users WHERE username='blank' OR 1=1;--' LIMIT 1;
+SQL: SELECT * FROM users WHERE username='blank' OR 1=1;--' LIMIT 1;
 \end{minted}
 As can be seen in the query generated in the second instance, an entirely new SQL query has been created with the \textbf{- -} used to comment out the rest of the line.
 Since 1=1 will always be true, whether the username exists in the database is irrelevant since the statement will return the first user in the database regardless. This is a dangerous
@@ -22,10 +22,10 @@ prospect as may allow a hacker access without relevant information and as such n
 \textbf{Testing the Vulnerability:} The Vulnerability gives access for all of the following usernames entered:
  
 \begin{minted}{text}
-   blank' OR 1=1;--
-   blank' OR 'x'='x';--
-   blank' OR '*;--
-   blank' OR TRUE;--
+blank' OR 1=1;--
+blank' OR 'x'='x';--
+blank' OR '*;--
+blank' OR TRUE;--
 \end{minted}
 Where 1 can be replaced with any number as well as 'x' and 'blank' any string. This can also be used to get any value from any table and since tokens are not time dependent, access
 to these would allow the hacker to gain full access to an account. This therefore is a serious security flaw.\\ \\
@@ -36,19 +36,19 @@ prepared statement works as follows:\\
  
 Rather than creating and executing the query as follows:
 \begin{minted}{java}
-   PreparedStatement stmt = null;
-   String query = "SELECT * FROM users WHERE username='"
-         + username + "' LIMIT 1;";
-   stmt = this.connection.Statement();
-   ResultSet rs = stmt.executeQuery(query);
+PreparedStatement stmt = null;
+String query = "SELECT * FROM users WHERE username='"
+      + username + "' LIMIT 1;";
+stmt = this.connection.Statement();
+ResultSet rs = stmt.executeQuery(query);
 \end{minted}
 It is done as follows:
 \begin{minted}{java}
-   PreparedStatement stmt = null;
-   String query = "SELECT * FROM users WHERE username=? LIMIT 1;";
-   stmt = this.connection.prepareStatement(query);
-   stmt.setString(1, username);
-   ResultSet rs = stmt.executeQuery();
+PreparedStatement stmt = null;
+String query = "SELECT * FROM users WHERE username=? LIMIT 1;";
+stmt = this.connection.prepareStatement(query);
+stmt.setString(1, username);
+ResultSet rs = stmt.executeQuery();
 \end{minted}
 This is the change I made to the \verb|DbConnection.java| file in order to mitigate this attack. Below is the automated test I designed in order to test the changes appropriately extinguished the
 vulnerability. Therefore I designed an automated test to run automatically on the startup of the server to check this vulnerability was not a threat. It can be seen at \verb|test1.java|. It

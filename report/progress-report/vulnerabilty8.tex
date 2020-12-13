@@ -1,0 +1,45 @@
+\section{Vulnerability: Users cannot change their passwords}
+\label{sec:background}
+\textbf{Description:} The previously established issues with the salts and hashing of passwords means that we can safely assume that an attacker could easily get access to a user's
+password through a combination of an sql attack with the effective use of brute forcing using rainbow tables. As such the lack of ability for a user to change their password is a
+serious security flaw, since in the very real possibility that their password is discovered through the outlined techniques, it would be impossible for them or indeed Wondough to
+change their password and deny the attacker further access \\ \\
+\textbf{Testing the Vulnerability:} This vulnerability is much harder to test. Simply I checked each of the functions to ensure that no such command existed to update the password
+of a user, which it did not. An attacker could use this exploit by using cross site scripting or sql injection (both previously outlined security flaws in this document). The use
+of either vulnerability could allow the attainment of the salt, and hashed password by the attacker. As such a custom rainbow table using the salt could be created to speed up the
+brute forcing process, made easier by low iterations and keysize. Once the password was obtained then the vulnerability could easily exploited by the repeated use of the password
+to access the account knowing there was no way to change the password. In addition this exploit could be used by the user themselves accidentally if they happened to forget their password
+and lock themselves out their account. \\ \\
+\textbf{Mitigation:} I did not (in accordance with the coursework specification) do any editing to the website. Rather a function was created and rigorously tested that would update
+a users password, easily implementable in a webpage at a later date. The function took three inputs, a username, a hashed current password, and a string new password. The webpage
+would hash the password of the user checking it is theirs and if so directing them to this function with the new password as an input. First of all the fetches the user from the
+database using \verb|getUser()| and hashes the user's new password. The function then checks if the passwords aren't the same and that the hashed password is the user's current password.
+Making it only possible for someone who knows the password to change the password:
+\begin{minted}{java}
+WondoughUser user = getUser(username);
+String newhashedPassword =
+   Program.getInstance().getSecurityConfiguration().pbkdf2(newPassword,
+   user.getSalt(), user.getIterations(), user.getKeySize());
+if(hashedpassword.equals(newhashedPassword)) return false;
+if(!(user.getHashedPassword().equals(hashedpassword))) return false;
+\end{minted}
+Following this if the new password is different and the old password matches the user's then a prepared statement is set up and executed to replace the password value in the database.
+\begin{minted}{java}
+PreparedStatement stmt;
+String sql = "UPDATE users SET password =? WHERE id =?";
+stmt = this.connection.prepareStatement(sql);
+try{
+   stmt.setString(1, newhashedPassword);
+   stmt.setInt(2, user.getID());
+   stmt.executeUpdate();
+   return true;
+}
+\end{minted}
+To design an automated test for this a new user was created with the password "password". Then \verb|changePassword()| is called twice, the first time with his password and the second with
+the new password "password2". If the password is changed the first time the test fails as the new password must be different, and then if it doesn't change the second time it also fail.
+\begin{minted}{java}
+if(connection.changePassword(testuser1.getUsername(),
+testuser1.getHashedPassword(), "password")) return "FAILED";
+\end{minted}
+Otherwise the test passed, it is then checked the two passwords are indeed different and finally the new user is removed from the database. The test passes every time, this vulnerability therefore
+is mitigated.

@@ -49,23 +49,23 @@ two entries into the database, one with request token as null and one with acces
 \end{figure}\\
 The expiry times were set as follows:
 \begin{minted}{java}
-    Timestamp now;
-    now = new Timestamp(System.currentTimeMillis());
-    now.setTime(now.getTime() + TimeUnit.MINUTES.toMillis(30));
-    stmt.setTimestamp(4, now);
+Timestamp now;
+now = new Timestamp(System.currentTimeMillis());
+now.setTime(now.getTime() + TimeUnit.MINUTES.toMillis(30));
+stmt.setTimestamp(4, now);
 
-    now = new Timestamp(System.currentTimeMillis());
-    now.setTime(now.getTime() + TimeUnit.HOURS.toMillis(1));
-    stmt.setTimestamp(4, now);
+now = new Timestamp(System.currentTimeMillis());
+now.setTime(now.getTime() + TimeUnit.HOURS.toMillis(1));
+stmt.setTimestamp(4, now);
 \end{minted}
 Finally a remove tokens function was created that would be called regularly to remove outdated tokens. It checked if the expiry date of the token had been surpassed by comparing
 it to the current time:
 \begin{minted}{java}
-    long ut1 = System.currentTimeMillis();
-    String query3 = "DELETE FROM authorised_apps "
-                   +"WHERE expiryDate < "+ ut1 + ";";
-    Statement stmt2 = this.connection.createStatement();
-    int rs = stmt2.executeUpdate(query3);
+long ut1 = System.currentTimeMillis();
+String query3 = "DELETE FROM authorised_apps "
+                +"WHERE expiryDate < "+ ut1 + ";";
+Statement stmt2 = this.connection.createStatement();
+int rs = stmt2.executeUpdate(query3);
 \end{minted}
 From this an automatic test was devised to ensure all these new criteria were met. It would create temporary tokens, ensure the difference in expiration date, value and then check
 they would be removed in an hours time. The randomness and greater complecity of the tokens alongside their limited time means this vulnerability has been mitigated as far as 
