@@ -32,8 +32,6 @@ public class AuthController {
         model.put("appname", name);
         model.put("target", request.queryParams("target"));
 
-        System.out.println(model);
-
         return ViewUtil.render(request, model, "/velocity/auth.vm");
     };
 
@@ -133,15 +131,15 @@ public class AuthController {
             // value cannot be read
 
             // System.out.println("QUERY LOGIN REDIRECT-> " + getQueryLoginRedirect(request));
-            // if(trustedURL(getQueryLoginRedirect(request))){
+            if(trustedURL(getQueryLoginRedirect(request))){
                 response.redirect(
                 getQueryLoginRedirect(request) +
                 "?token=" + URLEncoder.encode(config.md5(app.getRequestToken()), "UTF-8")
                 );
-            // }
-            // else{
-            //     model.put("error", getQueryLoginRedirect(request) + " isn't a trusted website");
-            // }
+            }
+            else{
+                model.put("error", getQueryLoginRedirect(request) + " isn't a trusted website");
+            }
             
         }
         try{

@@ -101,6 +101,33 @@ public class DbConnection {
         return 0;
     }
 
+
+    public boolean changePassword(String username, String hashedpassword, String newPassword) throws SQLException{
+        WondoughUser user = getUser(username);
+        String newhashedPassword = Program.getInstance().getSecurityConfiguration().pbkdf2(newPassword, user.getSalt(), user.getIterations(), user.getKeySize());
+        if(!(user.getHashedPassword().equals(hashedpassword))){
+            System.out.println(user.getHashedPassword() + "--" + hashedpassword);
+            return false;
+        }
+        else{
+            PreparedStatement stmt;
+            String sql = "UPDATE users SET password =? WHERE id =?";
+            stmt = this.connection.prepareStatement(sql);
+
+            try{
+                stmt.setString(1, newhashedPassword);
+                stmt.setInt(2, user.getID());
+                stmt.executeUpdate();
+                return true;
+            }
+            catch(SQLException e){
+                throw e;
+            } finally {
+                if (stmt != null) { stmt.close();}
+            }
+        }
+    }
+
     /**
     * Inserts the specified user account into the database. This method
     * assumes that the ID of the user is not set to anything.
