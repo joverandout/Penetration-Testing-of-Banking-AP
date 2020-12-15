@@ -18,6 +18,7 @@ public class APIController {
         // allow requests from anywhere
         response.header("Access-Control-Allow-Origin", "*");
 
+
         // retrieve the access token from the request
         String token = request.queryParams("token");
 

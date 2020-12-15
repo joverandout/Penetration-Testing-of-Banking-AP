@@ -26,13 +26,13 @@ public class test1 {
         try {
             for (int i = 0; i <= 3; i++) { //execute each of the attacks
                 //if a user is returned then the fix has not worked and the bug is still active
-				if (db.getUser(testSQLInjections[i]) instanceof WondoughUser) return "FAILED";
+                if (db.getUser(testSQLInjections[i]) instanceof WondoughUser) return "FAILED";
+                if (db.getUser("intern@wondoughbank.com") instanceof WondoughUser) return "PASSED";
 			}
         } catch (SQLException e) {
             return "FAILED" + e.toString();
         }
         //we then get a user we know to be in the db in order to ensure the connection isn't faulty
-        if (db.getUser("intern@wondoughbank.com") instanceof WondoughUser) return "PASSED";
         return "FAILED";
     }
 }

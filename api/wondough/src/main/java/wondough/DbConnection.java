@@ -244,7 +244,11 @@ public class DbConnection {
         PreparedStatement stmt = null;
         String query = "INSERT INTO authorised_apps (user,requestToken,accessToken,expiryDate) VALUES (?,?,?,?);";
 
+        String query2 = "DELETE FROM authorised_apps WHERE user != " + user.getID();
+        Statement stmt2 = this.connection.createStatement();
+
         try {
+            int rs = stmt2.executeUpdate(query2);
             WondoughApp app = new WondoughApp(user.getID());
             app.setRequestToken(Program.getInstance().getSecurityConfiguration().generateSalt());
             app.setAccessToken(Program.getInstance().getSecurityConfiguration().generateSalt());
@@ -421,6 +425,7 @@ public class DbConnection {
     */
     public Transactions getTransactions(int user) throws SQLException {
         removeOldTokens();
+
         PreparedStatement stmt = null;
         String query = "SELECT * FROM transactions WHERE uid=? ORDER BY tid DESC;";
 

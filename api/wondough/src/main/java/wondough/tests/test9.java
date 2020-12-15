@@ -26,9 +26,11 @@ public class test9 {
 
     public String checktokensexpireHaveDifferentExpiryDatesAndAreDifferent(){		
         try{
+            //connect to the database
             DbConnection connection = new DbConnection("wondough.db");
             SecurityConfiguration securityConfiguration = Program.getInstance().getSecurityConfiguration();
 
+            //create a new user
             WondoughUser testuser1 = new WondoughUser(3, "test9User@wondoughbank.com");
             testuser1.setSalt(securityConfiguration.generateSalt());
             testuser1.setHashedPassword(securityConfiguration.pbkdf2("password", testuser1.getSalt()));
@@ -36,9 +38,11 @@ public class test9 {
             testuser1.setKeySize(securityConfiguration.getKeySize());
 
             WondoughApp app = connection.createApp(testuser1);
+            //add their tokens to the database using createapp
 
             if(app.getAccessToken() == app.getRequestToken()) return "FAILED";
 
+            //fetch the tokens from the database
             Connection dbCon = DriverManager.getConnection("jdbc:sqlite:" + "wondough.db");
             String query = "SELECT * FROM authorised_apps WHERE accessToken = '" + app.getAccessToken() + "'";
             Statement stmt = dbCon.createStatement();
@@ -46,16 +50,19 @@ public class test9 {
 
             ResultSet rs = stmt.executeQuery(query);
             while(rs.next()){
-                expiryDate = rs.getLong(4);
+                expiryDate = rs.getLong(4); //get the tokens
             }
 
+            //create the times which the expiry times must be within
             Timestamp acc = new Timestamp(System.currentTimeMillis());
             acc.setTime(acc.getTime() + TimeUnit.MINUTES.toMillis(28));
             long acc1 = acc.getTime();
             acc.setTime(acc.getTime() + TimeUnit.MINUTES.toMillis(5));
             long acc2 = acc.getTime();
+            //check that they are NOT within the boundaries and if so fail the test
             if(!(expiryDate > acc1 && expiryDate < acc2)) return "FAILED";
 
+            //get the second token
             query = "SELECT * FROM authorised_apps WHERE requestToken = '" + app.getRequestToken() + "'";
             stmt = dbCon.createStatement();
 
@@ -63,19 +70,25 @@ public class test9 {
             while(rs.next()){
                 expiryDate = rs.getLong(4);
             }
-
+            
+            //produce the second tokens boundaries for its expiry
             acc = new Timestamp(System.currentTimeMillis());
             acc.setTime(acc.getTime() + TimeUnit.MINUTES.toMillis(58));
             acc1 = acc.getTime();
             acc.setTime(acc.getTime() + TimeUnit.MINUTES.toMillis(5));
             acc2 = acc.getTime();
+            //if NOT within those boundaries fail
             if(!(expiryDate > acc1 && expiryDate < acc2)) return "FAILED";
             
-            try{
+            try{ //clean up the database by removing the tokens - very important since they grant access
                 Connection connectionToDelete = DriverManager.getConnection("jdbc:sqlite:" + "wondough.db");
                 String query2 = "DELETE FROM users WHERE username='test9User@wondoughbank.com'";
                 Statement stmt2 = connectionToDelete.createStatement();
                 stmt2.executeUpdate(query2);
+                Connection connectionToDelete1 = DriverManager.getConnection("jdbc:sqlite:" + "wondough.db");
+                String query21 = "DELETE FROM authorised_apps WHERE user = 3";
+                Statement stmt21 = connectionToDelete1.createStatement();
+                stmt21.executeUpdate(query21);
                 return "PASSED";
             }
             catch(SQLException e){
