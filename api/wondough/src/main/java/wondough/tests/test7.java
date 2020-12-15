@@ -28,13 +28,16 @@ public class test7 {
         try{
             DbConnection connection = new DbConnection("wondough.db");
             SecurityConfiguration securityConfiguration = Program.getInstance().getSecurityConfiguration();
-
+            //fetch the secuirty configuration
+            //declare a 100,000 length array
             String[] salts = new String[100000];
 
             for (int i = 0; i < 100000; i++) {
+                //generate a salt for all of those values
                 salts[i] = securityConfiguration.generateSalt();
             }
 
+            //check if they are distinct by calling the distinct function
             if(areDistinct(salts)) return "PASSED";
             else return "FAILED";
         }

@@ -22,14 +22,17 @@ public class test6 {
 
     public String checkGetUserReturnstheCorrectID(){		
         try{
+            //connect to the database
             DbConnection connection = new DbConnection("wondough.db");
             SecurityConfiguration securityConfiguration = Program.getInstance().getSecurityConfiguration();
             Connection dbCon = DriverManager.getConnection("jdbc:sqlite:" + "wondough.db");
 
             WondoughUser testUser6 = connection.getUser("hacker@wondoughbank.com");
+            //get the hacker user uasing get user
 
             String query = "SELECT id FROM users WHERE username='hacker@wondoughbank.com' LIMIT 1;";
             Statement stmt = dbCon.createStatement();
+            //create a statement to get the id from the database
             int correctid = -1;
 
             ResultSet rs = stmt.executeQuery(query);
@@ -39,6 +42,7 @@ public class test6 {
             stmt.close();
             rs.close();
 
+            //check ids match and they are both 1
             if(testUser6.getID() == correctid && correctid == 1) return "PASSED";
             else return "FAILED";
         }
@@ -48,6 +52,3 @@ public class test6 {
         }
     }
 }
-
-//REGEX-BASED STRNG SAITISATION
-

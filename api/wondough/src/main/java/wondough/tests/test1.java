@@ -31,6 +31,8 @@ public class test1 {
         } catch (SQLException e) {
             return "FAILED" + e.toString();
         }
-		return "PASSED";
+        //we then get a user we know to be in the db in order to ensure the connection isn't faulty
+        if (db.getUser("intern@wondoughbank.com") instanceof WondoughUser) return "PASSED";
+        return "FAILED";
     }
 }

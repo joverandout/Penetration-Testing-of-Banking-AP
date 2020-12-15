@@ -49,12 +49,14 @@ public class test2 {
 
         DbConnection db = Program.getInstance().getDbConnection();
 		try {
+            //create a transaction more than his balance
 			if (db.createTransaction(2, 2, "test", (float) db.getTransactions(2).getAccountBalance()+1) == true) {
-				return "FAILED"; 
+				return "FAILED";  //if it works fail the test
 			} else {
 				try {
+                    //then try to m\ke a transaction of his balance
                     if (db.createTransaction(2, 2, "test", (float) db.getTransactions(2).getAccountBalance()) == true) {
-                        try{
+                        try{ //finally remove from the database all we've added since it's simply test data
                             Connection connectionToDelete = DriverManager.getConnection("jdbc:sqlite:" + "wondough.db");
                             String query = "DELETE FROM transactions WHERE description='test'";
                             Statement stmt = connectionToDelete.createStatement();

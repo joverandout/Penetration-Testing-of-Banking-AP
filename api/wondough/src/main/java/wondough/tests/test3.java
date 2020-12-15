@@ -25,11 +25,11 @@ public class test3 {
 
         Transaction transactionJustEntered = transactions.getTransactions().get(0); //get the transaction just entered
 
-        String description = transactionJustEntered.getDescription();
+        String description = transactionJustEntered.getDescription(); //get its description
 
-        int id = transactionJustEntered.getID();
+        int id = transactionJustEntered.getID(); //get its id
 
-        try{
+        try{ //try and remove the transaction from the database
             Connection connectionToDelete = DriverManager.getConnection("jdbc:sqlite:" + "wondough.db");
             String query = "DELETE FROM transactions WHERE tid="+id;
             Statement stmt = connectionToDelete.createStatement();
@@ -40,7 +40,7 @@ public class test3 {
             stmt.executeUpdate(query);
         }
         catch(SQLException e){
-            System.out.println(e.toString());
+            return "FAILED";
         }          
         
 
