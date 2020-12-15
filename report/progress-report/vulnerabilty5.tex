@@ -1,7 +1,7 @@
 \section{Vulnerability: PBKDF2 Iterations \& keysize}
 \label{sec:background}
 \textbf{Description:} The password hashing in the wondough website uses PBKDF2. This pseudo random hashing algorithm has a field called 'iterations', which is the number of times
-the PRF will be applied to the password when deriving the key. The number iterations was deemed to need to be 1000 as early as 2000, and A Kerberos standard in 2005 recommended
+the PRF will be applied to the password when deriving the key. The number of iterations was deemed to need to be 1000 as early as the year 2000, and A Kerberos standard in 2005 recommended
 4096 iterations. Therefore the current iteration set as 1 is an entirely unacceptable amount\cite{Cyrptosense2015}.\begin{center}
    \begin{tabular}{ |c|c|c|c| }
     \hline
@@ -14,14 +14,14 @@ the PRF will be applied to the password when deriving the key. The number iterat
     \hline
    \end{tabular}
    \end{center}
-The use of a salt has allowed the ability to use precomputed hashes (rainbow tables) to be reduced. It also prevents multiple passwords being tested together. The use of a keysize
-as small as 16 is also very dangerous and it is reccomended thata key size of 124 is used \cite{keysize}\\ \\
+The use of a salt has prevented the use precomputed hashes (rainbow tables). It also prevents multiple passwords being tested together. The use of a keysize
+as small as 16 is also very dangerous and it is reccomended that a key size of 124 is used \cite{keysize}\\ \\
 \textbf{Testing the Vulnerability:} A hacker could use an SQL injection attack (as previously demonstrated is possible on the wondough system) to retrieve hashed passwords of
 users. This means that given a low iteration he could much more easily and in a shorter time brute force the password. A brute force can take as little as 4 hours for 1000
 iterations as seen in the above table and consequently the average time to brute force 1 iteration is dangerously small. As such it is clear that the severity of this vulnerability
-is alarming. Since the likelihood of a brute force working is technically 100\%, although often unachievable time periods, by reducing these time periods to mere hours it
+is alarming. Since the likelihood of a brute force working is technically 100\%, although often in unachievable time periods, by reducing these time periods to mere hours it
 would allow a hacker to potentially gain access to huge amounts of account passwords and by extension their money. As such the threat is severe. \\ \\
-\textbf{Mitigation:} In line with current information I have decided in order to ensure that password are not likely to be brute forced in an reasonable time, to increase the
+\textbf{Mitigation:} In line with current information I have decided in order to ensure that passwords are not likely to be brute forced in any reasonable time, to increase the
 iteration size to 10,000\cite{10.1007/978-3-030-11437-4_8}. This should mean given even a basic 8 lowercase character password it would take (roughly) 5 days to brute force. This is a reasonable length of time
 given that users should have to have a wide range of characters in their password. I updated the \verb|security.json| file which the program uses to determine its security
 configuration.

@@ -2,8 +2,8 @@
 \label{sec:background}
 \textbf{Description:} The fourth vulnerability I discovered was the ability for multiple users to have the same username. This is a fundamental issue. The username of an account
 needs to be its unique identifier that allows a program to identify an individual specific user. If we allow multiple users to share a username then what will happen is that
-upon one of those users signing the program will return the id of the first user in the database with that username. This means that either if they have by chance chosen a
-bad and matching password that access to another users finances could be granted to another. Otherwise it will be impossible for a user to sign in and to access their finances,
+upon one of those users signing in, the program will return the id of the first user in the database with that username. This means that either if they have by chance chosen a
+bad and matching password that access to another user's finances could be granted to another. Otherwise it will be impossible for a user to sign in and to access their finances,
 which is without doubt a serious issue.\\ \\
 \textbf{Testing the Vulnerability:} To test this vulnerability I first uncommented the section of code that creates a new user. This then created the user \textit{test4User}
 twice, with passwords \textit{password} and \textit{password2} respectively. I then signed in to the website, as \textit{test4User@wondoughbank.com}, which I was only able to

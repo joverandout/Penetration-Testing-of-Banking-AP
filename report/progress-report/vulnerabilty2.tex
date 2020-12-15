@@ -25,4 +25,4 @@ if(amount > getTransactions(user).getAccountBalance()){
 This was then tested manually with inputs larger than the balance, which were all not entered as transactions, followed by the balance itself and values lower than it, all of
 which the fix permitted. However I then set about automating this testing. The automatic testing seen in \verb|test2.java| creates a new user \textit{testUser}, it then tries
 to remove his account balance + 1, which should fail if the fix is correct. It then tries the same with his exact account balance, if this works then the fix is perfect. Since
-both these conditions are always fine, this vulnerability has been correctly fixed.
+both these conditions now always pass, this vulnerability has been correctly fixed.

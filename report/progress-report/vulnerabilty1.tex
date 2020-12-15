@@ -52,7 +52,8 @@ ResultSet rs = stmt.executeQuery();
 \end{minted}
 This is the change I made to the \verb|DbConnection.java| file in order to mitigate this attack. Below is the automated test I designed in order to test the changes appropriately extinguished the
 vulnerability. Therefore I designed an automated test to run automatically on the startup of the server to check this vulnerability was not a threat. It can be seen at \verb|test1.java|. It
-works by calling the get user function with all four examples of SQL injection commands given previously. If none of them return a user then it passes else it fails. Below is the
+works by calling the get user function with all four examples of SQL injection commands given previously. If none of them return a user then it passes else it fails. It then also
+gets a user regularly just to ensure the connection failing is the reason for the test passing. Below is the
 important check.\begin{minted}{java}
 private String runSQLInjection(){
    String[] testSQLInjections = {"blank' OR 1=1;--",
