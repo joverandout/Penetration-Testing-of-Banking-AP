@@ -1,7 +1,19 @@
 # Cyber Security Penetration Testing of Wondough Bank API
 
 Joe Moore (u1917702) coursework for CS263 cyber security December 2020.
-Grade 87%.
+
+Grade awarded: 87%.
+
+My mark Breakdown:
+  Penetration Testing = 26/30
+  Quality Assurance = 24/30
+  Mitigations = 28/30
+  Good Academic Practice = 9/10
+
+Yeargroup marks breakdown:
+  Marked: 53
+  Average Mark: 67.58%
+  Standard Deviation: 21.78%
 
 The task:
 
