@@ -1,6 +1,6 @@
-# cs263Coursework
-Joe Moore (u1917702) coursework for cs263 cyber security.
+# Cyber Security Penetration Testing of Wondough Bank API
 
+Joe Moore (u1917702) coursework for CS263 cyber security December 2020.
 Grade 87%.
 
 The task:
