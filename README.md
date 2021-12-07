@@ -31,7 +31,10 @@ below and is worth 30% of the overall mark for this coursework:
 2. Set up automated tests for the vulnerabilities that you have identified.
 3. Fix the security vulnerabilities that you identified.
 The remaining 10% of the coursework mark will be awarded for good academic practice. All four marking criteria are described in detail below.
+  
+  
 There are two deliverables that you need to supply:
+  
 1. A report of at least 3000-4000 words (approximately 6-8 pages) which documents what you have done. This word/page count is merely a suggestion, not
 a hard limit. The length of the report should, however, be appropriate for the
 content: overly verbose reports that do not have much substance and exceed the
