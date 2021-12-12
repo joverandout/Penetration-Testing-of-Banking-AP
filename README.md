@@ -35,10 +35,7 @@ The remaining 10% of the coursework mark will be awarded for good academic pract
   
 There are two deliverables that you need to supply:
   
-1. A report of at least 3000-4000 words (approximately 6-8 pages) which documents what you have done. This word/page count is merely a suggestion, not
-a hard limit. The length of the report should, however, be appropriate for the
-content: overly verbose reports that do not have much substance and exceed the
-suggested limits may not be read in full at the discretion of the marker.
+1. A report of at least 3000-4000 words (approximately 6-8 pages) which documents what you have done. This word/page count is merely a suggestion, not a hard limit. The length of the report should, however, be appropriate for the content: overly verbose reports that do not have much substance and exceed the suggested limits may not be read in full at the discretion of the marker.
 2. An archive containing your modified version of the banking system, including
 test scripts.</em></strong>
 
